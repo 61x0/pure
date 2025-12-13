@@ -3,112 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pure</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>RROLL</title>
   <style>
+    /* BASIC RESET */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #fff; color: #111; scroll-behavior: smooth; overflow-x: hidden; }
 
-    /* Header */
-    header { position: fixed; top: 0; width: 100%; background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: background 0.3s; }
-    header h1 { font-weight: 700; font-size: 2rem; letter-spacing: 1px; }
-    nav a { margin-left: 25px; font-weight: 600; transition: color 0.3s, transform 0.2s; }
-    nav a:hover { color: #555; transform: scale(1.05); }
+    body {
+      min-height: 100vh;
+      background: black;
+      color: #e6e6e6;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-    /* Sections */
-    section { padding: 120px 20px; max-width: 1000px; margin: auto; text-align: center; }
-    section h2 { font-size: 2.2rem; margin-bottom: 20px; font-weight: 700; letter-spacing: 0.5px; }
-    section p { font-size: 1.1rem; line-height: 1.8; color: #333; margin-bottom: 30px; }
+    /* GRAIN / NOISE */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.4"/></svg>');
+      mix-blend-mode: overlay;
+    }
 
-    /* Button */
-    .button { display: inline-block; margin-top: 20px; padding: 14px 36px; background: #111; color: #fff; border-radius: 10px; font-weight: 600; letter-spacing: 0.5px; transition: background 0.3s, transform 0.2s; }
-    .button:hover { background: #333; transform: translateY(-2px); }
+    /* CONTAINER */
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 600px;
+      animation: fadeIn 2.5s ease-out forwards;
+      opacity: 0;
+      filter: blur(12px);
+      transform: translateY(20px);
+    }
 
-    /* Gallery */
-    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
-    .gallery img { width: 100%; border-radius: 15px; object-fit: cover; transition: transform 0.3s, box-shadow 0.3s; }
-    .gallery img:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        filter: blur(0px);
+        transform: translateY(0);
+      }
+    }
 
-    /* Contact Form */
-    form { display: flex; flex-direction: column; max-width: 450px; margin: auto; }
-    form input, form textarea { margin-bottom: 20px; padding: 14px; border: 1px solid #ccc; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1rem; transition: border 0.3s, box-shadow 0.3s; }
-    form input:focus, form textarea:focus { border-color: #111; box-shadow: 0 0 8px rgba(17,17,17,0.2); outline: none; }
-    form button { padding: 14px; border: none; border-radius: 10px; background: #111; color: #fff; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; transition: background 0.3s, transform 0.2s; }
-    form button:hover { background: #333; transform: translateY(-2px); }
+    h1 {
+      font-size: 4rem;
+      letter-spacing: 0.35em;
+      margin-bottom: 1rem;
+    }
 
-    /* Footer */
-    footer { text-align: center; padding: 50px 20px; background: #f7f7f7; margin-top: 50px; font-size: 0.95rem; color: #555; }
+    p {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      margin-bottom: 2rem;
+    }
 
-    html { scroll-padding-top: 80px; }
+    .subtext {
+      font-size: 0.9rem;
+      opacity: 0.6;
+      margin-bottom: 3rem;
+      animation: fadeInSub 2s ease forwards;
+      animation-delay: 2.5s;
+    }
 
-    /* Simple fade-in animation on scroll */
-    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 1s ease-out, transform 1s ease-out; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInSub {
+      from { opacity: 0; }
+      to { opacity: 0.6; }
+    }
+
+    /* BUTTON */
+    .btn {
+      position: relative;
+      padding: 0.8rem 2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: #e6e6e6;
+      border: 1px solid #e6e6e6;
+      background: transparent;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s ease;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #e6e6e6;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+
+    .btn:hover span {
+      color: black;
+    }
+
+    .btn:hover::after {
+      transform: scaleX(1);
+    }
   </style>
 </head>
 <body>
-
-  <!-- Header -->
-  <header>
-    <h1>Pure</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <!-- About -->
-  <section id="about" class="fade-in">
-    <h2>About Pure</h2>
-    <p>Pure is where minimalism meets bold design. Our mission is simple: create a clean, modern online presence that stands out effortlessly.</p>
-    <a href="#contact" class="button">Get in Touch</a>
-  </section>
-
-  <!-- Gallery -->
-  <section id="gallery" class="fade-in">
-    <h2>Gallery</h2>
-    <p>Check out some of our clean and bold creations below.</p>
-    <div class="gallery">
-      <img src="https://via.placeholder.com/400x300?text=Image+1" alt="Gallery Image 1">
-      <img src="https://via.placeholder.com/400x300?text=Image+2" alt="Gallery Image 2">
-      <img src="https://via.placeholder.com/400x300?text=Image+3" alt="Gallery Image 3">
-      <img src="https://via.placeholder.com/400x300?text=Image+4" alt="Gallery Image 4">
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="fade-in">
-    <h2>Contact Us</h2>
-    <p>Send us a message and we’ll get back to you as soon as possible.</p>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" rows="5" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    © 2025 Pure. All rights reserved.
-  </footer>
-
-  <script>
-    // Scroll fade-in effect
-    const faders = document.querySelectorAll('.fade-in');
-    const appearOptions = { threshold: 0.2 };
-    const appearOnScroll = new IntersectionObserver(function(entries, observer){
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, appearOptions);
-    faders.forEach(fader => appearOnScroll.observe(fader));
-  </script>
-
+  <div class="container">
+    <h1>RROLL</h1>
+    <p>access is not accidental</p>
+    <p class="subtext">this page is not indexed.<br>distribution is intentional.</p>
+    <button class="btn"><span>REQUEST ACCESS</span></button>
+  </div>
 </body>
 </html>
