@@ -3,46 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RROLL Interactive UI</title>
+<title>RROLL Neon Shop</title>
 <style>
-/* --- RESET --- */
-* { margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif; }
-body { min-height:100vh; background:black; color:#e6e6e6; overflow-x:hidden; position:relative; }
+* {margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif;}
+body {background:black; color:#00ff99; overflow-x:hidden; position:relative;}
 
 /* --- FLOATING DOTS --- */
-#bgCanvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
+#bgCanvas {position:fixed; top:0; left:0; width:100%; height:100%; z-index:0;}
 
 /* --- HEADER --- */
-header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; position:relative; z-index:2; }
-#logo { font-size:1.8rem; font-weight:bold; color:#00ff99; text-shadow:0 0 10px #00ff99,0 0 20px #00ff99; animation:pulse 2s infinite alternate; }
-@keyframes pulse {0%{text-shadow:0 0 5px #00ff99,0 0 10px #00ff99;}50%{text-shadow:0 0 15px #00ff99,0 0 30px #00ff99;}100%{text-shadow:0 0 10px #00ff99,0 0 20px #00ff99;}}
+header {display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; position:relative; z-index:2;}
+#logo {font-size:1.6rem; font-weight:bold; display:flex; gap:2px;}
 
-/* --- DROPDOWN --- */
-.dropdown { position:relative; }
-.dropdown button { background:transparent; border:1px solid #00ff99; color:#00ff99; padding:0.5rem 1rem; cursor:pointer; transition:0.3s; font-size:1rem; }
-.dropdown button:hover { background:#00ff99; color:black; }
-.dropdown-content { display:none; position:absolute; right:0; top:110%; background:#111; border:1px solid #00ff99; min-width:150px; z-index:3; }
-.dropdown-content a { display:block; padding:0.5rem 1rem; color:#00ff99; text-decoration:none; transition:0.3s; }
-.dropdown-content a:hover { background:#00ff99; color:black; }
-.dropdown:hover .dropdown-content { display:block; }
+/* --- LOGO LETTER ANIMATION --- */
+.logo-letter {text-shadow:0 0 5px #00ff99,0 0 10px #00ff99; animation:letterGlow 2s infinite alternate;}
+@keyframes letterGlow {0%{text-shadow:0 0 5px #00ff99,0 0 10px #00ff99;}50%{text-shadow:0 0 15px #00ff99,0 0 30px #00ff99;}100%{text-shadow:0 0 10px #00ff99,0 0 20px #00ff99;}}
+
+/* --- HAMBURGER MENU --- */
+.hamburger { cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; height:18px; width:24px; }
+.hamburger div { height:3px; background:#00ff99; border-radius:2px; transition:0.3s; box-shadow:0 0 5px #00ff99,0 0 10px #00ff99; }
+.menu { position:absolute; top:3rem; right:2rem; background:#111; border:1px solid #00ff99; border-radius:10px; padding:1rem; display:none; flex-direction:column; gap:0.5rem; z-index:3; animation:fadeIn 0.5s ease forwards; }
+.menu a { color:#00ff99; text-decoration:none; font-size:0.95rem; transition:0.3s; text-shadow:0 0 3px #00ff99,0 0 6px #00ff99; display:inline-block; }
+.menu a span { display:inline-block; animation:menuLetterGlow 2s infinite alternate; }
+@keyframes menuLetterGlow {0%{text-shadow:0 0 3px #00ff99,0 0 6px #00ff99;}50%{text-shadow:0 0 10px #00ff99,0 0 20px #00ff99;}100%{text-shadow:0 0 5px #00ff99,0 0 10px #00ff99;}}
 
 /* --- MAIN GRID --- */
-main { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:2rem; padding:3rem 2rem; position:relative; z-index:2; }
-.product-box { background:#111; border:2px solid #00ff99; position:relative; overflow:hidden; padding:1rem; display:flex; flex-direction:column; align-items:center; justify-content:space-between; transition: transform 0.3s, box-shadow 0.3s; }
-.product-box:hover { transform:scale(1.03); box-shadow:0 0 20px #00ff99,0 0 40px #00ff99; }
-.product-box img { width:100%; height:150px; object-fit:cover; margin-bottom:1rem; border-radius:6px; }
-.product-box h3 { margin-bottom:0.5rem; } .product-box p { margin-bottom:1rem; }
-.purchase-btn { border:1px solid #00ff99; padding:0.5rem 1rem; background:transparent; color:#00ff99; cursor:pointer; transition:0.3s; }
+main { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; padding:3rem 2rem; position:relative; z-index:2; }
+.product-box { background:#111; border-radius:15px; position:relative; overflow:hidden; padding:1rem; display:flex; flex-direction:column; align-items:center; justify-content:space-between; transition:transform 0.3s, box-shadow 0.3s; filter:drop-shadow(0 0 5px #00ff99); }
+.product-box:hover { transform:scale(1.03); box-shadow:0 0 25px #00ff99,0 0 50px #00ff99; }
+.product-box img { width:100%; height:120px; object-fit:cover; margin-bottom:0.8rem; border-radius:10px; }
+.product-box h3, .product-box p { text-shadow:0 0 3px #00ff99,0 0 6px #00ff99; } 
+.purchase-btn { border:1px solid #00ff99; padding:0.5rem 1rem; background:transparent; color:#00ff99; cursor:pointer; transition:0.3s; border-radius:8px; text-shadow:0 0 3px #00ff99,0 0 6px #00ff99; }
 .purchase-btn:hover { background:#00ff99; color:black; box-shadow:0 0 12px #00ff99,0 0 24px #00ff99; }
 
-/* --- NEON ANIMATED BORDER --- */
-.product-box::before { content:""; position:absolute; top:-2px; left:-2px; width:calc(100%+4px); height:calc(100%+4px); border:2px solid #00ff99; pointer-events:none; animation: neonBorder 3s linear infinite; }
-@keyframes neonBorder {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+/* --- NEON SNAKE BORDER --- */
+.product-box::before {content:"";position:absolute;top:0;left:0;width:100%;height:100%;border:2px solid #00ff99;border-radius:15px;pointer-events:none;background:linear-gradient(90deg,transparent,#00ff99,transparent);background-size:200% 100%;animation:neonSnake 3s linear infinite, borderGlow 2s infinite alternate;}
+@keyframes neonSnake {0%{background-position:0% 0;}100%{background-position:200% 0;}}
+@keyframes borderGlow {0%{box-shadow:0 0 5px #00ff99;}50%{box-shadow:0 0 15px #00ff99;}100%{box-shadow:0 0 5px #00ff99;}}
 
 /* --- MODALS --- */
-.modal-bg { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index:5; justify-content:center; align-items:center; }
-.modal-content { background:#111; border:2px solid #00ff99; padding:2rem; width:300px; text-align:center; color:#00ff99; border-radius:8px; }
-.modal-content button { margin-top:1rem; }
+.modal-bg {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5; justify-content:center; align-items:center;}
+.modal-content {background:#111; border:2px solid #00ff99; padding:2rem; width:300px; text-align:center; color:#00ff99; border-radius:10px; text-shadow:0 0 3px #00ff99,0 0 6px #00ff99;}
+.modal-content button {margin-top:1rem; border-radius:6px; border:1px solid #00ff99; background:transparent; color:#00ff99; cursor:pointer; text-shadow:0 0 3px #00ff99,0 0 6px #00ff99;}
+.modal-content button:hover {background:#00ff99; color:black; box-shadow:0 0 12px #00ff99,0 0 24px #00ff99;}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {from{opacity:0; transform:translateY(-10px);}to{opacity:1; transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -50,25 +56,34 @@ main { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); 
 <canvas id="bgCanvas"></canvas>
 
 <header>
-  <div id="logo">RROLL</div>
-  <div class="dropdown">
-    <button id="dropdownBtn">Login / Signup</button>
-    <div class="dropdown-content" id="dropdownContent">
-      <a href="#" id="loginBtn">Login</a>
-      <a href="#" id="signupBtn">Signup</a>
+  <div id="logo">
+    <span class="logo-letter">R</span>
+    <span class="logo-letter">R</span>
+    <span class="logo-letter">O</span>
+    <span class="logo-letter">L</span>
+    <span class="logo-letter">L</span>
+  </div>
+  <div style="position:relative;">
+    <div class="hamburger" id="hamburgerBtn"><div></div><div></div><div></div></div>
+    <div class="menu" id="menuItems">
+      <a href="#" id="loginLink"><span>Login</span></a>
+      <a href="#" id="signupLink"><span>Signup</span></a>
+      <a href="#" id="accountLink"><span>Account</span></a>
+      <a href="#" id="balanceLink"><span>Balance</span></a>
+      <a href="#" id="cartLink"><span>Cart</span></a>
     </div>
   </div>
 </header>
 
 <main id="mainContent">
   <div class="product-box" data-name="Product 1" data-price="$19.99">
-    <img src="https://via.placeholder.com/250x150" alt="Product">
+    <img src="https://via.placeholder.com/250x120" alt="Product">
     <h3>Product 1</h3>
     <p>$19.99</p>
     <button class="purchase-btn">Purchase</button>
   </div>
   <div class="product-box" data-name="Product 2" data-price="$29.99">
-    <img src="https://via.placeholder.com/250x150" alt="Product">
+    <img src="https://via.placeholder.com/250x120" alt="Product">
     <h3>Product 2</h3>
     <p>$29.99</p>
     <button class="purchase-btn">Purchase</button>
@@ -96,16 +111,19 @@ main { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); 
 
 <script>
 // --- FLOATING DOTS ---
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const numDots=80,dots=[];
-class Dot{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.radius=Math.random()*2+1;this.vx=(Math.random()-0.5)*0.5;this.vy=(Math.random()-0.5)*0.5;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);ctx.fillStyle='rgba(0,255,153,0.8)';ctx.fill();}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>canvas.width)this.vx*=-1;if(this.y<0||this.y>canvas.height)this.vy*=-1;this.draw();}}
-for(let i=0;i<numDots;i++){dots.push(new Dot());}
-function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);dots.forEach(dot=>dot.update());requestAnimationFrame(animate);}
-animate();
-window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+const canvas=document.getElementById('bgCanvas');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+const dots=[]; for(let i=0;i<80;i++){dots.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+1, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5});}
+function animateDots(){ctx.clearRect(0,0,canvas.width,canvas.height);dots.forEach(d=>{d.x+=d.vx; d.y+=d.vy; if(d.x<0||d.x>canvas.width)d.vx*=-1;if(d.y<0||d.y>canvas.height)d.vy*=-1;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fillStyle='rgba(0,255,153,0.8)';ctx.fill();});requestAnimationFrame(animateDots);}
+animateDots();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+
+// --- MENU TOGGLE ---
+const hamburgerBtn=document.getElementById('hamburgerBtn');
+const menuItems=document.getElementById('menuItems');
+let menuOpen=false;
+hamburgerBtn.onclick=()=>{ menuOpen=!menuOpen; menuItems.style.display=menuOpen?'flex':'none'; }
 
 // --- PURCHASE MODAL ---
 const purchaseModal=document.getElementById('purchaseModal');
@@ -122,33 +140,16 @@ document.querySelectorAll('.purchase-btn').forEach(btn=>{
 document.getElementById('cancelPurchase').onclick=()=>{purchaseModal.style.display='none';};
 document.getElementById('confirmPurchase').onclick=()=>{alert("Coming Soon: "+modalProductName.textContent); purchaseModal.style.display='none';};
 
-// --- ACCOUNT DROPDOWN ---
-let loggedIn=false;
-const dropdownBtn=document.getElementById('dropdownBtn');
-const dropdownContent=document.getElementById('dropdownContent');
+// --- ACCOUNT MODAL ---
 const accountModal=document.getElementById('accountModal');
-document.getElementById('loginBtn').onclick=()=>{
-  loggedIn=true;
-  dropdownBtn.textContent='Account';
-  dropdownContent.innerHTML=`
-    <a href="#" id="accountLink">Account</a>
-    <a href="#" id="settingsLink">Settings</a>
-  `;
-  document.getElementById('accountLink').onclick=()=>{ accountModal.style.display='flex'; };
-  document.getElementById('settingsLink').onclick=()=>{ alert('Coming Soon'); };
-};
-document.getElementById('signupBtn').onclick=()=>{ 
-  loggedIn=true;
-  dropdownBtn.textContent='Account';
-  dropdownContent.innerHTML=`
-    <a href="#" id="accountLink">Account</a>
-    <a href="#" id="settingsLink">Settings</a>
-  `;
-  document.getElementById('accountLink').onclick=()=>{ accountModal.style.display='flex'; };
-  document.getElementById('settingsLink').onclick=()=>{ alert('Coming Soon'); };
-};
+document.getElementById('accountLink').onclick=()=>{ accountModal.style.display='flex'; };
 document.getElementById('closeAccount').onclick=()=>{ accountModal.style.display='none'; };
-</script>
 
+// --- OTHER MENU BUTTONS ---
+document.getElementById('loginLink').onclick=()=>{ alert('Login clicked'); };
+document.getElementById('signupLink').onclick=()=>{ alert('Signup clicked'); };
+document.getElementById('balanceLink').onclick=()=>{ alert('Balance clicked'); };
+document.getElementById('cartLink').onclick=()=>{ alert('Cart clicked'); };
+</script>
 </body>
 </html>
