@@ -5,141 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RROLL</title>
 <style>
-/* BASIC RESET */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
 
-/* BODY & BACKGROUND */
-body {
-  min-height: 100vh;
-  background: black;
-  color: #e6e6e6;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
+body{
+  min-height:100vh;
+  background:black;
+  color:#e6e6e6;
+  font-family:'Arial',sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  position:relative;
 }
 
-/* GRAIN / NOISE */
-body::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.08;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.4"/></svg>');
+body::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0.08;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.4"/></svg>');
   mix-blend-mode: overlay;
 }
 
-/* CANVAS FOR FLOATING DOTS */
-#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+canvas#bgCanvas{
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
 }
 
-/* CONTAINER */
-.container {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 600px;
-  animation: fadeIn 2.5s ease-out forwards;
-  opacity: 0;
-  filter: blur(12px);
-  transform: translateY(20px);
-}
-
-@keyframes fadeIn { to { opacity:1; filter: blur(0px); transform: translateY(0); } }
-
-h1 {
-  font-size: 4rem;
-  letter-spacing: 0.35em;
-  margin-bottom: 1rem;
-}
-
-p { font-size: 0.8rem; opacity: 0.5; margin-bottom: 2rem; }
-
-.subtext {
-  font-size: 0.9rem;
-  opacity: 0.6;
-  margin-bottom: 3rem;
-  animation: fadeInSub 2s ease forwards;
-  animation-delay: 2.5s;
-}
-
-@keyframes fadeInSub { from{opacity:0;} to{opacity:0.6;} }
-
-/* BUTTONS */
-.buttons { display: flex; justify-content: center; gap: 1rem; }
-
-.btn {
-  position: relative;
-  padding: 0.8rem 2rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  color: #e6e6e6;
-  border: 1px solid #e6e6e6;
-  background: transparent;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.btn span { position: relative; z-index:1; transition: color 0.3s ease; }
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #e6e6e6;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-  z-index: 0;
-}
-.btn:hover span { color: black; }
-.btn:hover::after { transform: scaleX(1); }
-
-/* MODAL */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 2;
-  left:0; top:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.85);
-  justify-content:center;
-  align-items:center;
-}
-.modal-content {
-  background: #111;
-  padding:2rem;
-  border:1px solid #00ff99;
-  max-width:400px;
-  width:90%;
-  text-align:center;
-  border-radius:6px;
+.container{
   position:relative;
+  z-index:1;
+  text-align:center;
+  max-width:600px;
 }
-.modal-content input {
-  width:80%; padding:0.5rem; margin:0.5rem 0;
-  background:#222; color:#e6e6e6; border:1px solid #00ff99;
+
+h1,h2,p{margin-bottom:1rem;}
+input{
+  padding:0.6rem;
+  margin:0.5rem 0;
+  font-size:1rem;
+  background:#111;
+  color:#00ff99;
+  border:1px solid #00ff99;
+  width:80%;
 }
-.close-btn {
-  position:absolute; top:10px; right:15px;
-  font-size:1.2rem; cursor:pointer; color:#00ff99;
+
+button{
+  background:transparent;
+  border:1px solid #00ff99;
+  color:#00ff99;
+  padding:0.8rem 2rem;
+  margin:0.5rem;
+  cursor:pointer;
+  font-size:1rem;
+  transition:0.3s;
 }
-.modal-content button {
-  margin-top:1rem;
-  padding:0.6rem 1.5rem;
-  background:#00ff99; border:none; color:black;
-  cursor:pointer; font-weight:bold;
+
+button:hover{
+  background:#00ff99;
+  color:black;
+  box-shadow:0 0 12px #00ff99,0 0 24px #00ff99;
+}
+
+#authContainer, #mainContent{
+  position:relative;
+  z-index:1;
+}
+
+.subtext{
+  font-size:0.9rem;
+  opacity:0.6;
+  margin-bottom:3rem;
 }
 </style>
-<!-- FIREBASE SDK -->
+
 <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
@@ -148,52 +93,53 @@ p { font-size: 0.8rem; opacity: 0.5; margin-bottom: 2rem; }
 
 <canvas id="bgCanvas"></canvas>
 
-<div class="container">
+<!-- AUTH FORM -->
+<div id="authContainer" class="container">
+  <h2 style="color:#00ff99;">Sign Up / Login</h2>
+  
+  <input type="email" id="signupEmail" placeholder="Email">
+  <input type="password" id="signupPass" placeholder="Password">
+  <button id="signupBtn">Sign Up</button>
+  
+  <hr style="margin:1rem 0; border-color:#00ff99;">
+  
+  <input type="email" id="loginEmail" placeholder="Email">
+  <input type="password" id="loginPass" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</div>
+
+<!-- MAIN SITE CONTENT -->
+<div id="mainContent" class="container" style="display:none;">
   <h1>RROLL</h1>
-  <p>access is not accidental</p>
-  <p class="subtext">this page is not indexed.<br>distribution is intentional.</p>
-  <div class="buttons">
-    <button class="btn" id="openLogin"><span>Login</span></button>
-    <button class="btn" id="openSignup"><span>Sign Up</span></button>
-  </div>
-</div>
-
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeLogin">&times;</span>
-    <h2>Login</h2>
-    <input type="email" placeholder="Email" id="loginEmail"><br>
-    <input type="password" placeholder="Password" id="loginPassword"><br>
-    <button id="loginSubmit">Login</button>
-    <p style="margin-top:1rem; opacity:0.6;">or <a href="#" id="toSignup" style="color:#00ff99;">Sign Up</a></p>
-  </div>
-</div>
-
-<!-- SIGNUP MODAL -->
-<div class="modal" id="signupModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeSignup">&times;</span>
-    <h2>Sign Up</h2>
-    <input type="email" placeholder="Email" id="signupEmail"><br>
-    <input type="password" placeholder="Password" id="signupPassword"><br>
-    <input type="password" placeholder="Confirm Password" id="signupConfirm"><br>
-    <button id="signupSubmit">Sign Up</button>
-    <p style="margin-top:1rem; opacity:0.6;">or <a href="#" id="toLogin" style="color:#00ff99;">Login</a></p>
-  </div>
+  <p>Access is not accidental.</p>
+  <p class="subtext">This page is not indexed.<br>Distribution is intentional.</p>
+  <button class="btn">Explore</button>
 </div>
 
 <script>
-// -------------------- FLOATING DOTS --------------------
+// ---------------- FIREBASE ----------------
+const firebaseConfig = {
+  apiKey: "AIzaSyDFk2cA98terok0Ly0Wkczevb8-5PYUZy4",
+  authDomain: "rrollcard.firebaseapp.com",
+  projectId: "rrollcard",
+  storageBucket: "rrollcard.firebasestorage.app",
+  messagingSenderId: "571030673010",
+  appId: "1:571030673010:web:ac251b013ae124f7eb94eb",
+  measurementId: "G-P7L80J9SCN"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ---------------- FLOATING DOTS ----------------
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
 const numDots = 80;
 const dots = [];
-class Dot {
-  constructor(){
+class Dot{
+  constructor(){ 
     this.x=Math.random()*canvas.width;
     this.y=Math.random()*canvas.height;
     this.radius=Math.random()*2+1;
@@ -208,69 +154,46 @@ function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); dots.forEach(
 animate();
 window.addEventListener('resize',()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
 
-// -------------------- MODAL LOGIC --------------------
-const loginModal = document.getElementById('loginModal');
-const signupModal = document.getElementById('signupModal');
-const openLoginBtn = document.getElementById('openLogin');
-const openSignupBtn = document.getElementById('openSignup');
-const closeLogin = document.getElementById('closeLogin');
-const closeSignup = document.getElementById('closeSignup');
-const toSignup = document.getElementById('toSignup');
-const toLogin = document.getElementById('toLogin');
-
-openLoginBtn.onclick=()=>loginModal.style.display='flex';
-openSignupBtn.onclick=()=>signupModal.style.display='flex';
-closeLogin.onclick=()=>loginModal.style.display='none';
-closeSignup.onclick=()=>signupModal.style.display='none';
-toSignup.onclick=(e)=>{e.preventDefault(); loginModal.style.display='none'; signupModal.style.display='flex';}
-toLogin.onclick=(e)=>{e.preventDefault(); signupModal.style.display='none'; loginModal.style.display='flex';}
-
-// -------------------- FIREBASE CONFIG --------------------
-const firebaseConfig = {
-  apiKey: "AIzaSyDFk2cA98terok0Ly0Wkczevb8-5PYUZy4",
-  authDomain: "rrollcard.firebaseapp.com",
-  projectId: "rrollcard",
-  storageBucket: "rrollcard.firebasestorage.app",
-  messagingSenderId: "571030673010",
-  appId: "1:571030673010:web:ac251b013ae124f7eb94eb",
-  measurementId: "G-P7L80J9SCN"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// -------------------- SIGNUP --------------------
-document.getElementById('signupSubmit').onclick = async () => {
+// ---------------- SIGNUP ----------------
+document.getElementById('signupBtn').onclick = async () => {
   const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-  const confirm = document.getElementById('signupConfirm').value;
-  if(password !== confirm){ alert('Passwords do not match'); return; }
-  try{
-    const userCredential = await auth.createUserWithEmailAndPassword(email,password);
-    await userCredential.user.sendEmailVerification();
-    await db.collection('users').doc(userCredential.user.uid).set({email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
-    alert('Verification email sent! Check your inbox.');
-    signupModal.style.display='none';
-  }catch(err){ alert(err.message); }
-}
+  const pass = document.getElementById('signupPass').value;
+  if(!email||!pass){ alert('Fill in both fields'); return; }
+  try {
+    const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+    await db.collection('users').doc(userCred.user.uid).set({
+      email: email,
+      role: 'user',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    alert('Signup successful! You can now log in.');
+    document.getElementById('signupEmail').value='';
+    document.getElementById('signupPass').value='';
+  } catch(e){ alert('Error: '+e.message); }
+};
 
-// -------------------- LOGIN --------------------
-document.getElementById('loginSubmit').onclick = async () => {
+// ---------------- LOGIN ----------------
+document.getElementById('loginBtn').onclick = async () => {
   const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  try{
-    const userCredential = await auth.signInWithEmailAndPassword(email,password);
-    if(userCredential.user.emailVerified){
-      alert('Login successful!');
-      // redirect or show dashboard
-    } else {
-      alert('Please verify your email before logging in.');
-      auth.signOut();
-    }
-    loginModal.style.display='none';
-  }catch(err){ alert(err.message); }
-}
-</script>
+  const pass = document.getElementById('loginPass').value;
+  if(!email||!pass){ alert('Fill in both fields'); return; }
+  try {
+    const userCred = await auth.signInWithEmailAndPassword(email, pass);
+    document.getElementById('authContainer').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  } catch(e){ alert('Login failed: '+e.message); }
+};
 
+// ---------------- AUTH STATE ----------------
+auth.onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById('authContainer').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  } else {
+    document.getElementById('authContainer').style.display='block';
+    document.getElementById('mainContent').style.display='none';
+  }
+});
+</script>
 </body>
 </html>
