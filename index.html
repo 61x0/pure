@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>𝐫𝐫𝐨𝐥𝐥</title>
+  <title>rroll</title>
 
   <style>
-    /* RESET */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      transition: all 0.2s ease;
     }
 
     body {
@@ -21,64 +19,45 @@
       overflow-x: hidden;
     }
 
-    /* BACKGROUND DOTS */
     .bg-dots {
       position: fixed;
       inset: 0;
       z-index: -1;
-      background-image:
-        radial-gradient(circle, rgba(0, 200, 180, 0.35) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(0,200,180,.35) 1px, transparent 1px);
       background-size: 22px 22px;
       animation: rise 1.8s linear infinite;
-      opacity: 0.5;
+      opacity: .5;
     }
 
     @keyframes rise {
       from { background-position: 0 0; }
-      to   { background-position: 0 -220px; }
+      to { background-position: 0 -220px; }
     }
 
-    /* BANNER */
     .top-banner {
-      background: linear-gradient(90deg, #0f766e, #0284c7);
-      color: #e5f9f7;
+      background: linear-gradient(90deg,#0f766e,#0284c7);
       text-align: center;
       padding: 10px;
       font-size: 13px;
     }
 
-    .top-banner a {
-      color: #ffffff;
-      font-weight: 600;
-      text-decoration: underline;
-    }
-
-    /* HEADER */
     .header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       padding: 18px 20px;
     }
 
     .logo {
       font-weight: 800;
       letter-spacing: 2px;
-      font-size: 20px;
     }
 
-    .menu {
-      font-size: 22px;
-      cursor: pointer;
-    }
-
-    /* HERO */
     .hero {
-      padding: 30px 20px 60px;
+      padding: 30px 20px 40px;
       text-align: center;
     }
 
-    .hero h1 {
+    h1 {
       font-size: 42px;
       letter-spacing: 3px;
     }
@@ -89,14 +68,13 @@
       color: #9ca3af;
     }
 
-    /* SEARCH */
     .search-box {
-      margin-top: 30px;
+      margin: 30px auto;
       display: flex;
-      background: linear-gradient(180deg, #141a1f, #0f1418);
+      max-width: 520px;
+      background: #11161b;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
     }
 
     .search-box input {
@@ -106,102 +84,171 @@
       border: none;
       color: white;
       outline: none;
-      font-size: 15px;
     }
 
     .search-box button {
       padding: 0 22px;
+      background: linear-gradient(180deg,#0f766e,#0284c7);
       border: none;
-      background: linear-gradient(180deg, #0f766e, #0284c7);
       color: white;
       font-weight: 600;
       cursor: pointer;
     }
 
-    /* OR TEXT */
-    .or {
-      margin: 20px 0;
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    /* CATEGORIES */
     .categories {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
+      margin-bottom: 40px;
     }
 
     .chip {
       padding: 10px 16px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
       font-size: 12px;
       letter-spacing: 1px;
-      color: #d1d5db;
       cursor: pointer;
     }
 
-    .chip:hover {
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.08);
+    .chip.active {
+      background: linear-gradient(180deg,#0f766e,#0284c7);
+      border: none;
     }
 
-    .chip.active {
-      background: linear-gradient(180deg, #0f766e, #0284c7);
-      color: white;
-      border: none;
+    /* PRODUCTS */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 0 20px 60px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      background: #11161b;
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+
+    .card a {
+      display: inline-block;
+      font-size: 13px;
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Background -->
-  <div class="bg-dots"></div>
+<div class="bg-dots"></div>
 
-  <!-- Banner -->
-  <div class="top-banner">
-    All Our Links Here -> — <a href="#">Join here</a>
+<div class="top-banner">
+  All Our Links Here → <a href="#" style="color:white">Join here</a>
+</div>
+
+<header class="header">
+  <div class="logo">rroll</div>
+</header>
+
+<main class="hero">
+  <h1>RROLL</h1>
+  <p class="subtitle">We rroll out free game 24/7</p>
+
+  <div class="search-box">
+    <input id="search" type="text" placeholder="Search product..." />
+    <button>Product</button>
   </div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="logo">rroll</div>
-    <div class="menu">&#9776;</div>
-  </header>
+  <div class="categories" id="categories"></div>
+</main>
 
-  <!-- Main -->
-  <main class="hero">
-    <h1>𝐑𝐑𝐎𝐋𝐋</h1>
-    <p class="subtitle">We rroll out free game 24/7</p>
+<section class="products" id="products"></section>
 
-    <div class="search-box">
-      <input type="text" placeholder="Search product..." />
-      <button>Product</button>
-    </div>
+<script>
+  const products = [
+    {
+      name: "Free Flight Credit",
+      category: "FLIGHTS",
+      description: "Claim airline credit with zero deposit.",
+      link: "#"
+    },
+    {
+      name: "Streaming Trial Stack",
+      category: "STREAMING",
+      description: "Multiple platforms, zero cost.",
+      link: "#"
+    },
+    {
+      name: "Gas Cashback Boost",
+      category: "GAS",
+      description: "Instant fuel cashback offer.",
+      link: "#"
+    }
+  ];
 
-    <p class="or">or select category</p>
+  const categories = ["ALL", ...new Set(products.map(p => p.category))];
 
-    <div class="categories">
-      <div class="chip active">ALL</div>
-      <div class="chip">TRAVEL</div>
-      <div class="chip">FLIGHTS</div>
-      <div class="chip">SHOPPING</div>
-      <div class="chip">STREAMING</div>
-      <div class="chip">HOTELS</div>
-      <div class="chip">GROCERIES</div>
-      <div class="chip">GAS</div>
-      <div class="chip">FOOD</div>
-      <div class="chip">CASHOUT</div>
-      <div class="chip">CLOTHING</div>
-      <div class="chip">RENTALS</div>
-      <div class="chip">CARPARTS</div>
-      <div class="chip">GIFTCARDS</div>
-      <div class="chip">VPN</div>
-    </div>
-  </main>
+  const productsEl = document.getElementById("products");
+  const categoriesEl = document.getElementById("categories");
+  const searchInput = document.getElementById("search");
+
+  let activeCategory = "ALL";
+
+  function renderCategories() {
+    categoriesEl.innerHTML = categories.map(cat => `
+      <div class="chip ${cat === activeCategory ? "active" : ""}" data-cat="${cat}">
+        ${cat}
+      </div>
+    `).join("");
+  }
+
+  function renderProducts() {
+    const query = searchInput.value.toLowerCase();
+
+    const filtered = products.filter(p =>
+      (activeCategory === "ALL" || p.category === activeCategory) &&
+      p.name.toLowerCase().includes(query)
+    );
+
+    productsEl.innerHTML = filtered.map(p => `
+      <div class="card">
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+        <a href="${p.link}">View →</a>
+      </div>
+    `).join("") || "<p style='color:#6b7280'>No results found.</p>";
+  }
+
+  categoriesEl.addEventListener("click", e => {
+    if (!e.target.dataset.cat) return;
+    activeCategory = e.target.dataset.cat;
+    renderCategories();
+    renderProducts();
+  });
+
+  searchInput.addEventListener("input", renderProducts);
+
+  renderCategories();
+  renderProducts();
+</script>
 
 </body>
 </html>
