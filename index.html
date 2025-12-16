@@ -7,7 +7,7 @@
 
 <style>
 * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif }
-body { background:#0b0e11; color:#fff; overflow-x:hidden }
+body { background:#0b0e11; color:#ffffff; overflow-x:hidden }
 
 .bg-dots{
   position:fixed; inset:0; z-index:-1;
@@ -26,7 +26,7 @@ body { background:#0b0e11; color:#fff; overflow-x:hidden }
 
 .hero{text-align:center; padding:30px 20px 40px}
 h1{font-size:42px; letter-spacing:3px}
-.subtitle{color:#9ca3af; font-size:14px; margin-top:10px}
+.subtitle{color:#cbd5e1; font-size:14px; margin-top:10px}
 
 .search-box{
   max-width:520px; margin:30px auto;
@@ -63,14 +63,13 @@ h1{font-size:42px; letter-spacing:3px}
   width:100%; height:140px; object-fit:cover;
   border-radius:12px; margin-bottom:12px
 }
-.card h3{font-size:15px; margin-bottom:6px}
-.card p{font-size:13px; color:#9ca3af; margin-bottom:12px}
+.product-title{font-size:15px; margin-bottom:6px}
+.card p{font-size:13px; color:#cbd5e1; margin-bottom:12px}
 .card button{
   background:none; border:none; color:#38bdf8;
   font-weight:600; cursor:pointer
 }
 
-/* MODAL */
 .modal{
   position:fixed; inset:0; background:rgba(0,0,0,.7);
   display:none; align-items:center; justify-content:center; z-index:10
@@ -84,13 +83,12 @@ h1{font-size:42px; letter-spacing:3px}
   width:100%; height:180px; object-fit:cover;
   border-radius:14px; margin-bottom:14px
 }
-.modal-box h2{margin-bottom:6px}
-.modal-box p{font-size:13px; color:#9ca3af; margin-bottom:10px}
+.modal-box h3{margin-bottom:6px}
+.modal-box p{font-size:13px; color:#cbd5e1; margin-bottom:10px}
 .close{
-  text-align:right; font-size:13px; cursor:pointer; color:#6b7280
+  text-align:right; font-size:13px; cursor:pointer; color:#94a3b8
 }
 
-/* FOOTER */
 .footer{
   margin:60px 20px 30px;
   background:#11161b; border-radius:16px;
@@ -100,9 +98,9 @@ h1{font-size:42px; letter-spacing:3px}
   display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:12px
 }
 .footer-links a{
-  color:#9ca3af; font-size:12px; text-decoration:none
+  color:#94a3b8; font-size:12px; text-decoration:none
 }
-.footer small{color:#6b7280; font-size:11px}
+.footer small{color:#94a3b8; font-size:11px}
 </style>
 </head>
 
@@ -129,12 +127,11 @@ h1{font-size:42px; letter-spacing:3px}
 
 <section class="products" id="products"></section>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="close" onclick="closeModal()">Close</div>
-    <img id="modalImg">
-    <h2 id="modalTitle"></h2>
+    <img id="modalImg" alt="">
+    <h3 id="modalTitle"></h3>
     <p id="modalDesc"></p>
     <p><strong>Warranty:</strong> <span id="modalWarranty"></span></p>
     <p><strong>How to use:</strong> <span id="modalUse"></span></p>
@@ -145,7 +142,7 @@ h1{font-size:42px; letter-spacing:3px}
   <div class="footer-links">
     <a href="#reviews">REVIEWS</a>
     <a href="#tos">TOS</a>
-    <a href="https://discord.gg/nRUjf55dtj" target="_blank">VOUCHES</a>
+    <a href="https://discord.gg/nRUjf55dtj" target="_blank" rel="noopener">VOUCHES</a>
     <a href="#bulk">BULK / DISCOUNTS</a>
     <a href="#faqs">FAQS</a>
   </div>
@@ -178,8 +175,8 @@ function renderProducts(){
     (active==="ALL"||p.category===active)&&p.name.toLowerCase().includes(q)
   ).map(p=>`
     <div class="card">
-      <img src="${p.image}">
-      <h3>${p.name}</h3>
+      <img src="${p.image}" alt="${p.name} product image">
+      <h2 class="product-title">${p.name}</h2>
       <p>${p.description}</p>
       <button onclick='openModal(${JSON.stringify(p)})'>View →</button>
     </div>
@@ -189,6 +186,7 @@ function renderProducts(){
 function openModal(p){
   modal.classList.add("active");
   modalImg.src=p.image;
+  modalImg.alt=p.name+" product image";
   modalTitle.textContent=p.name;
   modalDesc.textContent=p.description;
   modalWarranty.textContent=p.warranty;
