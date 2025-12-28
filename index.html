@@ -9,16 +9,14 @@
 * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif }
 body { background:#0b0e11; color:#ffffff; overflow-x:hidden }
 
-/* NEW: Starfield canvas background (replaces .bg-dots) */
+/* STARFIELD BACKGROUND */
 #bg-stars{
   position:fixed;
   inset:0;
   z-index:-1;
   width:100%;
   height:100%;
-  display:block;
   pointer-events:none;
-  /* subtle depth glow to keep your teal/blue vibe */
   background:
     radial-gradient(1200px 600px at 50% 10%, rgba(0,200,180,.10), transparent 55%),
     radial-gradient(1000px 500px at 70% 70%, rgba(2,132,199,.08), transparent 55%),
@@ -115,8 +113,7 @@ h1{font-size:42px; letter-spacing:3px}
 
 <body>
 
-<!-- NEW: background canvas -->
-<canvas id="bg-stars" aria-hidden="true"></canvas>
+<canvas id="bg-stars"></canvas>
 
 <div class="top-banner">All Our Links Here → Join</div>
 
@@ -161,117 +158,69 @@ h1{font-size:42px; letter-spacing:3px}
 </footer>
 
 <script>
-/* ---------- STARFIELD (scattered dots + rising ONLY, no scroll reaction) ---------- */
+/* STARFIELD (NO SCROLL INTERACTION) */
 (() => {
-  const canvas = document.getElementById("bg-stars");
-  const ctx = canvas.getContext("2d", { alpha: true });
-
-  const DOT_SIZE_MIN = 0.9;
-  const DOT_SIZE_MAX = 1.4;
-  const OPACITY_MIN  = 0.18;
-  const OPACITY_MAX  = 0.55;
-
-  const DENSITY = 0.000085;
-  const BASE_RISE_MIN = 14;
-  const BASE_RISE_MAX = 34;
-
-  const DRIFT_STRENGTH  = 0.22;
-
-  let w = 0, h = 0, dpr = 1;
+  const c = document.getElementById("bg-stars");
+  const ctx = c.getContext("2d");
+  let w, h, dpr;
   let dots = [];
-  let lastT = performance.now();
-
-  function rand(min, max){ return Math.random() * (max - min) + min; }
+  let last = performance.now();
 
   function resize(){
-    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    w = Math.floor(window.innerWidth);
-    h = Math.floor(window.innerHeight);
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    c.style.width = w+"px";
+    c.style.height = h+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
 
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const count = Math.max(120, Math.floor(w * h * DENSITY));
-    dots = Array.from({ length: count }, () => makeDot(true));
+    const count = Math.max(120, w*h*0.000085);
+    dots = Array.from({length:count},()=>({
+      x:Math.random()*w,
+      y:Math.random()*h,
+      r:0.9+Math.random()*0.6,
+      a:0.18+Math.random()*0.35,
+      rise:14+Math.random()*20,
+      phase:Math.random()*Math.PI*2,
+      speed:0.6+Math.random()*0.7,
+      amp:6+Math.random()*12,
+      c:Math.random()<0.55?[0,200,180]:[2,132,199]
+    }));
   }
 
-  function makeDot(initial=false){
-    const x = rand(0, w);
-    const y = initial ? rand(0, h) : (h + rand(10, h * 0.35));
+  function draw(t){
+    const dt = Math.min(.033,(t-last)/1000);
+    last=t;
+    ctx.clearRect(0,0,w,h);
 
-    const rise = rand(BASE_RISE_MIN, BASE_RISE_MAX);
-    const driftPhase = rand(0, Math.PI * 2);
-    const driftSpeed = rand(0.6, 1.3);
-    const driftAmp = rand(6, 18) * DRIFT_STRENGTH;
+    for(const d of dots){
+      d.y -= d.rise*dt;
+      d.phase += d.speed*dt;
+      d.x += Math.sin(d.phase)*d.amp*0.22*dt;
 
-    const tint = Math.random();
-    const col = tint < 0.55
-      ? { r: 0, g: 200, b: 180 }
-      : { r: 2, g: 132, b: 199 };
+      if(d.y<-30){ d.y=h+30; d.x=Math.random()*w; }
 
-    return {
-      x, y,
-      r: rand(DOT_SIZE_MIN, DOT_SIZE_MAX),
-      a: rand(OPACITY_MIN, OPACITY_MAX),
-      rise,
-      driftPhase,
-      driftSpeed,
-      driftAmp,
-      col
-    };
-  }
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.r*3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${d.a*.1})`;
+      ctx.fill();
 
-  function drawDot(d){
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, d.r * 3.2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${d.a * 0.10})`;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${d.a})`;
-    ctx.fill();
-  }
-
-  function tick(t){
-    const dt = Math.min(0.033, (t - lastT) / 1000);
-    lastT = t;
-
-    ctx.clearRect(0, 0, w, h);
-
-    for (let i = 0; i < dots.length; i++){
-      const d = dots[i];
-
-      d.y -= d.rise * dt;
-
-      d.driftPhase += d.driftSpeed * dt;
-      d.x += Math.sin(d.driftPhase) * d.driftAmp * dt;
-
-      if (d.y < -30){
-        dots[i] = makeDot(false);
-        continue;
-      }
-      if (d.x < -40) d.x = w + 40;
-      if (d.x > w + 40) d.x = -40;
-
-      drawDot(d);
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${d.a})`;
+      ctx.fill();
     }
-
-    requestAnimationFrame(tick);
+    requestAnimationFrame(draw);
   }
 
-  window.addEventListener("resize", resize, { passive: true });
-
+  window.addEventListener("resize",resize);
   resize();
-  requestAnimationFrame(tick);
+  requestAnimationFrame(draw);
 })();
-</script>
 
-/* ---------- YOUR EXISTING SITE LOGIC (unchanged) ---------- */
+/* SITE LOGIC (UNCHANGED) */
 const products = Array.from({length:50},(_,i)=>({
   name:`Product ${i+1}`,
   category:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8],
