@@ -10,58 +10,198 @@
 body{background:#0b0e11;color:#fff;overflow-x:hidden}
 
 /* ---------- STARFIELD ---------- */
-#bg-stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+#bg-stars{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+}
 
-/* ---------- HEADER / HERO (UNCHANGED VISUALLY) ---------- */
-.top-banner{background:linear-gradient(90deg,#0f766e,#0284c7);text-align:center;padding:10px;font-size:13px}
-.header{display:flex;justify-content:space-between;padding:18px 20px}
-.logo{font-weight:900;font-size:22px;letter-spacing:2px;-webkit-text-stroke:1px rgba(0,200,180,.55);text-shadow:0 0 14px rgba(0,200,180,.35)}
+/* ---------- TOP ---------- */
+.top-banner{
+  background:linear-gradient(90deg,#0f766e,#0284c7);
+  text-align:center;
+  padding:10px;
+  font-size:13px
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  padding:18px 20px
+}
+
+.logo{
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:2px;
+  -webkit-text-stroke:1px rgba(0,200,180,.55);
+  text-shadow:0 0 14px rgba(0,200,180,.35)
+}
+
+/* ---------- HERO ---------- */
 .hero{text-align:center;padding:30px 20px 40px}
-.hero-title{display:flex;justify-content:center;align-items:center;gap:6px;font-size:44px;font-weight:900;letter-spacing:4px;-webkit-text-stroke:1.4px rgba(0,200,180,.65);text-shadow:0 0 18px rgba(0,200,180,.35),0 0 32px rgba(2,132,199,.25)}
-.subtitle{margin-top:14px;font-size:12px;letter-spacing:2px;color:#9fbec7}
+
+.hero-title{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:4px;
+  -webkit-text-stroke:1.4px rgba(0,200,180,.65);
+  text-shadow:
+    0 0 18px rgba(0,200,180,.35),
+    0 0 32px rgba(2,132,199,.25)
+}
+
 .dice{width:40px;height:40px}
 
-/* ---------- SEARCH / CATEGORIES ---------- */
-.search-box{max-width:520px;margin:30px auto;display:flex;background:#11161b;border-radius:16px;overflow:hidden}
-.search-box input{flex:1;padding:16px;background:transparent;border:none;color:white;outline:none}
-.search-box button{padding:0 22px;background:linear-gradient(180deg,#0f766e,#0284c7);border:none;color:white;font-weight:600;cursor:pointer}
-.categories{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:40px}
-.chip{padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;letter-spacing:1px;cursor:pointer}
-.chip.active{background:linear-gradient(180deg,#0f766e,#0284c7);border:none}
+.subtitle{
+  margin-top:14px;
+  font-size:12px;
+  letter-spacing:2px;
+  color:#9fbec7
+}
+
+/* ---------- SEARCH ---------- */
+.search-box{
+  max-width:520px;
+  margin:30px auto;
+  display:flex;
+  background:#11161b;
+  border-radius:16px;
+  overflow:hidden
+}
+.search-box input{
+  flex:1;
+  padding:16px;
+  background:transparent;
+  border:none;
+  color:white;
+  outline:none
+}
+.search-box button{
+  padding:0 22px;
+  background:linear-gradient(180deg,#0f766e,#0284c7);
+  border:none;
+  color:white;
+  font-weight:600;
+  cursor:pointer
+}
+
+/* ---------- CATEGORIES ---------- */
+.categories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:40px
+}
+.chip{
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  font-size:12px;
+  letter-spacing:1px;
+  cursor:pointer
+}
+.chip.active{
+  background:linear-gradient(180deg,#0f766e,#0284c7);
+  border:none
+}
 
 /* ---------- PRODUCTS ---------- */
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:0 20px 60px;max-width:1200px;margin:auto}
-.card{background:#11161b;border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,.08)}
-.logo-slot{width:100%;height:150px;border-radius:14px;background:#0c1116;border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 0 24px rgba(0,0,0,.65);margin-bottom:12px}
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  padding:0 20px 60px;
+  max-width:1200px;
+  margin:auto
+}
+
+.card{
+  background:#11161b;
+  border-radius:16px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.08)
+}
+
+.logo-slot{
+  width:100%;
+  height:150px;
+  border-radius:14px;
+  background:#0c1116;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 0 24px rgba(0,0,0,.65);
+  margin-bottom:12px
+}
+
 .product-title{font-size:15px;margin-bottom:6px}
 .card p{font-size:13px;color:#cbd5e1;margin-bottom:12px}
-.card button{width:100%;padding:12px;background:#5a0000;border:none;border-radius:10px;color:white;font-weight:700;cursor:pointer}
+
+.card button{
+  width:100%;
+  padding:12px;
+  background:#5a0000;
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-weight:700;
+  cursor:pointer
+}
+
+/* ---------- MODAL ---------- */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10
+}
+.modal.active{display:flex}
+.modal-box{
+  background:#0f1418;
+  width:92%;
+  max-width:520px;
+  border-radius:18px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.1)
+}
+.close{
+  text-align:right;
+  font-size:13px;
+  cursor:pointer;
+  color:#94a3b8
+}
 
 /* ---------- FOOTER ---------- */
-.footer{margin:60px 20px 30px;background:#11161b;border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.08)}
-.footer-links{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:12px}
-.footer-links a{color:#94a3b8;font-size:12px;text-decoration:none;cursor:pointer}
+.footer{
+  margin:60px 20px 30px;
+  background:#11161b;
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.08)
+}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  justify-content:center;
+  margin-bottom:12px
+}
+.footer-links a{
+  color:#94a3b8;
+  font-size:12px;
+  text-decoration:none
+}
 .footer small{color:#94a3b8;font-size:11px}
-
-/* ---------- OVERLAYS ---------- */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:20}
-.overlay.active{display:block}
-.overlay-box{max-width:900px;margin:40px auto;background:#0f1418;border-radius:18px;padding:24px;border:1px solid rgba(255,255,255,.1);max-height:85vh;overflow:auto}
-.overlay h2{margin-bottom:14px}
-.close{float:right;cursor:pointer;color:#94a3b8}
-
-/* ---------- REVIEWS ---------- */
-.reviews{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.review{background:#11161b;border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,.08);animation:float 4s ease-in-out infinite}
-.review:nth-child(even){animation-delay:1.2s}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.stars{color:#facc15;letter-spacing:2px;font-size:14px}
-.avatar{width:40px;height:40px;border-radius:50%;background:#1f2933;margin-bottom:8px}
-
-/* ---------- FAQ ---------- */
-.faq-item{border-bottom:1px solid rgba(255,255,255,.08);padding:10px 0}
-.faq-q{cursor:pointer;font-weight:600}
-.faq-a{display:none;font-size:13px;color:#cbd5e1;margin-top:6px}
 </style>
 </head>
 
@@ -71,19 +211,23 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
 
 <div class="top-banner">All Our Links Here → Join</div>
 
-<header class="header"><div class="logo">RROLL</div></header>
+<header class="header">
+  <div class="logo">RROLL</div>
+</header>
 
 <main class="hero">
   <div class="hero-title">
     RR
     <svg class="dice" viewBox="0 0 100 100">
-      <rect x="8" y="8" width="84" height="84" rx="18" fill="white" stroke="rgba(0,200,180,.85)" stroke-width="6"/>
+      <rect x="8" y="8" width="84" height="84" rx="18"
+        fill="white" stroke="rgba(0,200,180,.85)" stroke-width="6"/>
       <circle cx="50" cy="50" r="7" fill="#0b0e11"/>
       <circle cx="30" cy="30" r="7" fill="#0b0e11"/>
       <circle cx="70" cy="70" r="7" fill="#0b0e11"/>
     </svg>
     LL
   </div>
+
   <div class="subtitle">FREE GAME • VERIFIED • 24/7</div>
 
   <div class="search-box">
@@ -96,86 +240,96 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
 
 <section class="products" id="products"></section>
 
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="close" onclick="closeModal()">Close</div>
+    <h3 id="modalTitle"></h3>
+    <p id="modalDesc"></p>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="footer-links">
-    <a onclick="openOverlay('tos')">TOS</a>
-    <a onclick="openOverlay('reviews')">REVIEWS</a>
-    <a href="https://discord.gg/nRUjf55dtj" target="_blank">VOUCHES</a>
-    <a onclick="openOverlay('bulk')">BULK / DISCOUNTS</a>
-    <a onclick="openOverlay('faqs')">FAQS</a>
+    <a>TOS</a>
+    <a>REVIEWS</a>
+    <a>VOUCHES</a>
+    <a>BULK / DISCOUNTS</a>
+    <a>FAQS</a>
   </div>
   <small>© 2025 RROLL. All rights reserved.</small>
 </footer>
 
-<!-- ---------- OVERLAYS ---------- -->
-<div id="tos" class="overlay"><div class="overlay-box">
-  <div class="close" onclick="closeOverlay()">Close</div>
-  <h2>Terms of Service</h2>
-  <p>By using RROLL you agree to all terms, conditions, and policies. Digital goods are final sale. No chargebacks.</p>
-  <p>Misuse, abuse, or redistribution voids service.</p>
-</div></div>
-
-<div id="reviews" class="overlay"><div class="overlay-box">
-  <div class="close" onclick="closeOverlay()">Close</div>
-  <h2>User Reviews</h2>
-  <div class="reviews">
-    <div class="review"><div class="avatar"></div><div class="stars">★★★★★</div><p>Instant and legit.</p></div>
-    <div class="review"><div class="avatar"></div><div class="stars">★★★★★</div><p>Best site I’ve used.</p></div>
-    <div class="review"><div class="avatar"></div><div class="stars">★★★★★</div><p>Fast delivery.</p></div>
-  </div>
-</div></div>
-
-<div id="bulk" class="overlay"><div class="overlay-box">
-  <div class="close" onclick="closeOverlay()">Close</div>
-  <h2>Bulk / Discounts</h2>
-  <p>Bulk pricing available. Contact support or open a ticket via Discord.</p>
-</div></div>
-
-<div id="faqs" class="overlay"><div class="overlay-box">
-  <div class="close" onclick="closeOverlay()">Close</div>
-  <h2>FAQs</h2>
-  <div class="faq-item">
-    <div class="faq-q">Is delivery instant?</div>
-    <div class="faq-a">Yes, delivery is instant after purchase.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q">Are refunds available?</div>
-    <div class="faq-a">No refunds on digital goods.</div>
-  </div>
-</div></div>
-
 <script>
 /* ---------- STARFIELD ---------- */
-const c=document.getElementById("bg-stars"),x=c.getContext("2d");let w,h,d=[];
-function r(){w=c.width=innerWidth;h=c.height=innerHeight;d=[...Array(Math.floor(w*h*0.00008))].map(()=>({x:Math.random()*w,y:Math.random()*h,s)});}
-function a(){x.clearRect(0,0,w,h);d.forEach(p=>{p.y-=.4;if(p.y<0)p.y=h;x.fillStyle="rgba(0,200,180,.35)";x.beginPath();x.arc(p.x,p.y,1.2,0,Math.PI*2);x.fill()});requestAnimationFrame(a)}
-r();a();onresize=r;
+const c=document.getElementById("bg-stars"),x=c.getContext("2d");
+let w,h,d=[];
+function resize(){
+  w=c.width=innerWidth;
+  h=c.height=innerHeight;
+  d=[...Array(Math.floor(w*h*0.000085))].map(()=>({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    s:Math.random()*20+10
+  }));
+}
+function anim(){
+  x.clearRect(0,0,w,h);
+  d.forEach(p=>{
+    p.y-=p.s*0.016;
+    if(p.y<0)p.y=h;
+    x.fillStyle="rgba(0,200,180,.35)";
+    x.beginPath();
+    x.arc(p.x,p.y,1.2,0,Math.PI*2);
+    x.fill();
+  });
+  requestAnimationFrame(anim);
+}
+resize();anim();onresize=resize;
 
 /* ---------- PRODUCTS ---------- */
-const products=[...Array(50)].map((_,i)=>({name:`Product ${i+1}`,cat:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8]}));
+const products=[...Array(50)].map((_,i)=>({
+  name:`Product ${i+1}`,
+  cat:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8]
+}));
 const cats=["ALL",...new Set(products.map(p=>p.cat))];
 let active="ALL";
-const catEl=categories,prodEl=productsEl=document.getElementById("products"),search=document.getElementById("search");
 
-function rc(){catEl.innerHTML=cats.map(c=>`<div class="chip ${c===active?"active":""}" data-c="${c}">${c}</div>`).join("")}
-function rp(){
-  prodEl.innerHTML=products.filter(p=>(active==="ALL"||p.cat===active)&&p.name.toLowerCase().includes(search.value.toLowerCase()))
-  .map(p=>`<div class="card"><div class="logo-slot"></div><div class="product-title">${p.name}</div><p>Instant delivery • Verified</p><button>Purchase</button></div>`).join("")
+const catEl=document.getElementById("categories");
+const prodEl=document.getElementById("products");
+const search=document.getElementById("search");
+
+function renderCats(){
+  catEl.innerHTML=cats.map(c=>`<div class="chip ${c===active?"active":""}" data-c="${c}">${c}</div>`).join("");
 }
-catEl.onclick=e=>{if(e.target.dataset.c){active=e.target.dataset.c;rc();rp()}}
-search.oninput=rp;rc();rp();
+function renderProducts(){
+  prodEl.innerHTML=products
+    .filter(p=>(active==="ALL"||p.cat===active)&&p.name.toLowerCase().includes(search.value.toLowerCase()))
+    .map(p=>`
+      <div class="card">
+        <div class="logo-slot"></div>
+        <div class="product-title">${p.name}</div>
+        <p>Instant delivery • Verified</p>
+        <button onclick="openModal('${p.name}')">Purchase | $3.00</button>
+      </div>
+    `).join("");
+}
 
-/* ---------- OVERLAY CONTROLS ---------- */
-function openOverlay(id){document.getElementById(id).classList.add("active")}
-function closeOverlay(){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("active"))}
-
-/* FAQ TOGGLE */
-document.addEventListener("click",e=>{
-  if(e.target.classList.contains("faq-q")){
-    const a=e.target.nextElementSibling;
-    a.style.display=a.style.display==="block"?"none":"block";
+catEl.onclick=e=>{
+  if(e.target.dataset.c){
+    active=e.target.dataset.c;
+    renderCats();renderProducts();
   }
-});
+};
+search.oninput=renderProducts;
+
+function openModal(name){
+  modal.classList.add("active");
+  modalTitle.textContent=name;
+  modalDesc.textContent="Purchase instructions will appear here.";
+}
+function closeModal(){modal.classList.remove("active")}
+
+renderCats();renderProducts();
 </script>
 
 </body>
