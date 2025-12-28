@@ -29,10 +29,91 @@ body { background:#0b0e11; color:#ffffff; overflow-x:hidden }
 }
 
 .header{display:flex; justify-content:space-between; padding:18px 20px}
-.logo{font-weight:800; letter-spacing:2px}
+
+/* ---------------- ROLL ANIMATION SYSTEM (constant, not glitchy) ---------------- */
+.roll-text{
+  display:inline-flex;
+  align-items:baseline;
+  white-space:nowrap;
+  line-height:1;
+  color:#fff;
+  text-shadow:
+    0 0 10px rgba(56,189,248,.18),
+    0 0 24px rgba(0,200,180,.10);
+}
+
+.roll-text .ch{
+  display:inline-block;
+  transform-origin:50% 80%;
+  will-change: transform, opacity, filter;
+  animation-name: roll-cycle;
+  animation-timing-function: cubic-bezier(.45,0,.55,1);
+  animation-iteration-count: infinite;
+
+  /* per-instance defaults (override on .roll-hero/.roll-logo/.roll-product) */
+  animation-duration: var(--dur, 2.8s);
+  animation-delay: calc(var(--i, 0) * var(--step, .12s) + var(--phase, 0s));
+}
+
+/* The “roll” motion: lift + slight tilt + settle (smooth loop) */
+@keyframes roll-cycle{
+  0%   { transform: translateY(0) rotate(0deg); opacity:.92; filter:none; }
+  25%  { transform: translateY(var(--lift, -4px)) rotate(var(--tiltA, -2.5deg)); opacity:1; }
+  50%  { transform: translateY(calc(var(--lift, -4px) * 1.35)) rotate(0deg); }
+  75%  { transform: translateY(calc(var(--lift, -4px) * .8)) rotate(var(--tiltB, 2.5deg)); }
+  100% { transform: translateY(0) rotate(0deg); opacity:.92; filter:none; }
+}
+
+/* Hero title: more present */
+.roll-hero{
+  --dur: 2.85s;
+  --step: .12s;
+  --lift: -4px;
+  --tiltA: -3deg;
+  --tiltB: 3deg;
+}
+
+/* Logo: calmer + slower */
+.roll-logo{
+  --dur: 4.6s;
+  --step: .14s;
+  --lift: -2px;
+  --tiltA: -2deg;
+  --tiltB: 2deg;
+  opacity:.96;
+}
+
+/* Product titles: subtle + slower; each title gets a different phase (set in JS) */
+.roll-product{
+  --dur: 5.2s;
+  --step: .07s;
+  --lift: -2px;
+  --tiltA: -1.6deg;
+  --tiltB: 1.6deg;
+  text-shadow:
+    0 0 8px rgba(56,189,248,.14),
+    0 0 18px rgba(0,200,180,.08);
+}
+
+/* Reduce motion friendly */
+@media (prefers-reduced-motion: reduce){
+  .roll-text .ch{ animation: none !important; }
+}
+
+/* ---------------- Rest of your styling ---------------- */
+.logo{
+  font-weight:800;
+  letter-spacing:2px;
+}
 
 .hero{text-align:center; padding:30px 20px 40px}
-h1{font-size:42px; letter-spacing:3px}
+
+/* Keep your hero typography sizing but now applied to the roll container */
+.hero-title{
+  font-size:42px;
+  letter-spacing:3px;
+}
+
 .subtitle{color:#cbd5e1; font-size:14px; margin-top:10px}
 
 .search-box{
@@ -70,6 +151,7 @@ h1{font-size:42px; letter-spacing:3px}
   width:100%; height:140px; object-fit:cover;
   border-radius:12px; margin-bottom:12px
 }
+
 .product-title{font-size:15px; margin-bottom:6px}
 .card p{font-size:13px; color:#cbd5e1; margin-bottom:12px}
 .card button{
@@ -113,16 +195,18 @@ h1{font-size:42px; letter-spacing:3px}
 
 <body>
 
-<canvas id="bg-stars"></canvas>
+<canvas id="bg-stars" aria-hidden="true"></canvas>
 
 <div class="top-banner">All Our Links Here → Join</div>
 
 <header class="header">
-  <div class="logo">rroll</div>
+  <!-- Logo (constant roll, calm) -->
+  <div class="logo roll-text roll-logo" id="logoText" aria-label="rroll"></div>
 </header>
 
 <main class="hero">
-  <h1>RROLL</h1>
+  <!-- Hero title (constant roll, more present) -->
+  <div class="roll-text roll-hero hero-title" id="heroTitle" aria-label="RROLL"></div>
   <p class="subtitle">We rroll out free game 24/7</p>
 
   <div class="search-box">
@@ -158,69 +242,138 @@ h1{font-size:42px; letter-spacing:3px}
 </footer>
 
 <script>
-/* STARFIELD (NO SCROLL INTERACTION) */
+/* ---------------- STARFIELD (seamless loop, no scroll, no pop/glitch) ---------------- */
 (() => {
-  const c = document.getElementById("bg-stars");
-  const ctx = c.getContext("2d");
-  let w, h, dpr;
+  const canvas = document.getElementById("bg-stars");
+  const ctx = canvas.getContext("2d", { alpha: true });
+
+  const DOT_SIZE_MIN = 0.9;
+  const DOT_SIZE_MAX = 1.4;
+  const OPACITY_MIN  = 0.18;
+  const OPACITY_MAX  = 0.55;
+
+  const DENSITY = 0.000085;
+  const RISE_MIN = 14;
+  const RISE_MAX = 34;
+
+  const TOP_FADE_BAND = 160;
+  const BOTTOM_FADE_BAND = 190;
+  const SPAWN_BELOW = 0.85;
+
+  const DRIFT_STRENGTH = 0.22;
+
+  let w = 0, h = 0, dpr = 1;
   let dots = [];
-  let last = performance.now();
+  let lastT = performance.now();
+
+  const rand = (min, max) => Math.random() * (max - min) + min;
 
   function resize(){
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    w = window.innerWidth;
-    h = window.innerHeight;
-    c.width = w * dpr;
-    c.height = h * dpr;
-    c.style.width = w+"px";
-    c.style.height = h+"px";
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    w = Math.floor(window.innerWidth);
+    h = Math.floor(window.innerHeight);
 
-    const count = Math.max(120, w*h*0.000085);
-    dots = Array.from({length:count},()=>({
-      x:Math.random()*w,
-      y:Math.random()*h,
-      r:0.9+Math.random()*0.6,
-      a:0.18+Math.random()*0.35,
-      rise:14+Math.random()*20,
-      phase:Math.random()*Math.PI*2,
-      speed:0.6+Math.random()*0.7,
-      amp:6+Math.random()*12,
-      c:Math.random()<0.55?[0,200,180]:[2,132,199]
-    }));
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.max(120, Math.floor(w * h * DENSITY));
+    dots = Array.from({ length: count }, () => makeDot(true));
   }
 
-  function draw(t){
-    const dt = Math.min(.033,(t-last)/1000);
-    last=t;
-    ctx.clearRect(0,0,w,h);
+  function makeDot(initial=false){
+    const tint = Math.random();
+    const col = tint < 0.55 ? { r: 0, g: 200, b: 180 } : { r: 2, g: 132, b: 199 };
 
-    for(const d of dots){
-      d.y -= d.rise*dt;
-      d.phase += d.speed*dt;
-      d.x += Math.sin(d.phase)*d.amp*0.22*dt;
+    return {
+      x: rand(0, w),
+      y: initial ? rand(0, h) : (h + rand(40, h * SPAWN_BELOW)),
+      r: rand(DOT_SIZE_MIN, DOT_SIZE_MAX),
+      a: rand(OPACITY_MIN, OPACITY_MAX),
+      rise: rand(RISE_MIN, RISE_MAX),
+      phase: rand(0, Math.PI * 2),
+      speed: rand(0.6, 1.3),
+      amp: rand(6, 18) * DRIFT_STRENGTH,
+      col
+    };
+  }
 
-      if(d.y<-30){ d.y=h+30; d.x=Math.random()*w; }
+  function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
 
-      ctx.beginPath();
-      ctx.arc(d.x,d.y,d.r*3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${d.a*.1})`;
-      ctx.fill();
+  function fadeForY(y){
+    const topFade = clamp01((y - 0) / TOP_FADE_BAND);
+    const bottomFade = clamp01((h - y) / BOTTOM_FADE_BAND);
+    return Math.min(topFade, bottomFade);
+  }
 
-      ctx.beginPath();
-      ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${d.c[0]},${d.c[1]},${d.c[2]},${d.a})`;
-      ctx.fill();
+  function drawDot(d, alphaMul){
+    const a = d.a * alphaMul;
+
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r * 3.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${a * 0.10})`;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${a})`;
+    ctx.fill();
+  }
+
+  function tick(t){
+    const dt = Math.min(0.033, (t - lastT) / 1000);
+    lastT = t;
+
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = 0; i < dots.length; i++){
+      const d = dots[i];
+
+      d.y -= d.rise * dt;
+      d.phase += d.speed * dt;
+      d.x += Math.sin(d.phase) * d.amp * dt;
+
+      if (d.x < -40) d.x = w + 40;
+      if (d.x > w + 40) d.x = -40;
+
+      if (d.y < -40){
+        dots[i] = makeDot(false);
+        continue;
+      }
+
+      const fade = fadeForY(d.y);
+      if (fade > 0.001) drawDot(d, fade);
     }
-    requestAnimationFrame(draw);
+
+    requestAnimationFrame(tick);
   }
 
-  window.addEventListener("resize",resize);
+  window.addEventListener("resize", resize, { passive: true });
   resize();
-  requestAnimationFrame(draw);
+  requestAnimationFrame(tick);
 })();
 
-/* SITE LOGIC (UNCHANGED) */
+/* ---------------- ROLL TEXT HELPERS (auto-split letters, constant motion) ---------------- */
+function renderRollText(el, text, phaseSeconds = 0){
+  // Build spans per character so we can offset timing without “glitch” artifacts.
+  // Keep spaces as non-breaking for safety.
+  const safe = String(text).replace(/ /g, "\u00A0");
+  el.innerHTML = "";
+  el.style.setProperty("--phase", `${phaseSeconds}s`);
+
+  for (let i = 0; i < safe.length; i++){
+    const span = document.createElement("span");
+    span.className = "ch";
+    span.style.setProperty("--i", i);
+    span.textContent = safe[i];
+    el.appendChild(span);
+  }
+}
+
+/* ---------------- SITE LOGIC (products + categories) ---------------- */
 const products = Array.from({length:50},(_,i)=>({
   name:`Product ${i+1}`,
   category:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8],
@@ -237,21 +390,50 @@ const catEl=document.getElementById("categories");
 const prodEl=document.getElementById("products");
 const search=document.getElementById("search");
 
+// Initialize constant rolling titles (different phases so they’re not synced)
+renderRollText(document.getElementById("logoText"), "rroll", 0.35);
+renderRollText(document.getElementById("heroTitle"), "RROLL", 0.00);
+
 function renderCats(){
   catEl.innerHTML=cats.map(c=>`<div class="chip ${c===active?"active":""}" data-cat="${c}">${c}</div>`).join("");
 }
+
+function escapeHtml(s){
+  return String(s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
 function renderProducts(){
   const q=search.value.toLowerCase();
-  prodEl.innerHTML=products.filter(p=>
-    (active==="ALL"||p.category===active)&&p.name.toLowerCase().includes(q)
-  ).map(p=>`
-    <div class="card">
-      <img src="${p.image}" alt="${p.name} product image">
-      <h2 class="product-title">${p.name}</h2>
-      <p>${p.description}</p>
-      <button onclick='openModal(${JSON.stringify(p)})'>View →</button>
-    </div>
-  `).join("");
+  const filtered = products.filter(p =>
+    (active==="ALL"||p.category===active) && p.name.toLowerCase().includes(q)
+  );
+
+  prodEl.innerHTML = filtered.map((p, idx) => {
+    // Unique phase per card so product titles don’t march in sync
+    const phase = ((idx % 11) * 0.23).toFixed(2);
+
+    // Build a roll-text container for the title (spans inserted after render)
+    return `
+      <div class="card" data-phase="${phase}">
+        <img src="${p.image}" alt="${escapeHtml(p.name)} product image">
+        <h2 class="product-title roll-text roll-product" data-roll-title="1">${escapeHtml(p.name)}</h2>
+        <p>${escapeHtml(p.description)}</p>
+        <button onclick='openModal(${JSON.stringify(p)})'>View →</button>
+      </div>
+    `;
+  }).join("");
+
+  // Convert each product title into rolling spans
+  const titles = prodEl.querySelectorAll('[data-roll-title="1"]');
+  titles.forEach((t, i) => {
+    const phase = Number((t.closest(".card")?.dataset.phase) || 0);
+    renderRollText(t, t.textContent, phase);
+  });
 }
 
 function openModal(p){
