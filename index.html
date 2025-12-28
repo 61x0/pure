@@ -161,33 +161,25 @@ h1{font-size:42px; letter-spacing:3px}
 </footer>
 
 <script>
-/* ---------- STARFIELD (scattered dots + rising + scroll parallax) ---------- */
+/* ---------- STARFIELD (scattered dots + rising ONLY, no scroll reaction) ---------- */
 (() => {
   const canvas = document.getElementById("bg-stars");
   const ctx = canvas.getContext("2d", { alpha: true });
 
-  // Tunables (kept subtle, like your screenshot)
-  const DOT_SIZE_MIN = 0.9;     // circle radius min
-  const DOT_SIZE_MAX = 1.4;     // circle radius max
+  const DOT_SIZE_MIN = 0.9;
+  const DOT_SIZE_MAX = 1.4;
   const OPACITY_MIN  = 0.18;
   const OPACITY_MAX  = 0.55;
 
-  const DENSITY = 0.000085;     // dots per pixel (lower = fewer)
-  const BASE_RISE_MIN = 14;     // px/sec
-  const BASE_RISE_MAX = 34;     // px/sec
+  const DENSITY = 0.000085;
+  const BASE_RISE_MIN = 14;
+  const BASE_RISE_MAX = 34;
 
-  const SCROLL_PARALLAX = 0.18; // how much dots drift on scroll (feel)
-  const DRIFT_STRENGTH  = 0.22; // sideways micro drift strength
+  const DRIFT_STRENGTH  = 0.22;
 
   let w = 0, h = 0, dpr = 1;
   let dots = [];
   let lastT = performance.now();
-  let scrollY = window.scrollY || 0;
-  let scrollVel = 0;
-
-  // keep scroll velocity for a smooth "moves when you scroll" feel
-  let lastScrollY = scrollY;
-  let lastScrollT = performance.now();
 
   function rand(min, max){ return Math.random() * (max - min) + min; }
 
@@ -208,25 +200,21 @@ h1{font-size:42px; letter-spacing:3px}
   }
 
   function makeDot(initial=false){
-    // Random scatter everywhere (no grid)
     const x = rand(0, w);
     const y = initial ? rand(0, h) : (h + rand(10, h * 0.35));
 
-    // each dot has its own upward speed + slight side drift
     const rise = rand(BASE_RISE_MIN, BASE_RISE_MAX);
     const driftPhase = rand(0, Math.PI * 2);
     const driftSpeed = rand(0.6, 1.3);
     const driftAmp = rand(6, 18) * DRIFT_STRENGTH;
 
-    // subtle teal/blue tint variation (still looks like "stars", not neon)
     const tint = Math.random();
     const col = tint < 0.55
-      ? { r: 0,   g: 200, b: 180 }  // teal
-      : { r: 2,   g: 132, b: 199 }; // blue
+      ? { r: 0, g: 200, b: 180 }
+      : { r: 2, g: 132, b: 199 };
 
     return {
-      x,
-      y,
+      x, y,
       r: rand(DOT_SIZE_MIN, DOT_SIZE_MAX),
       a: rand(OPACITY_MIN, OPACITY_MAX),
       rise,
@@ -237,61 +225,32 @@ h1{font-size:42px; letter-spacing:3px}
     };
   }
 
-  function onScroll(){
-    const now = performance.now();
-    const y = window.scrollY || 0;
-    const dt = Math.max(1, now - lastScrollT);
-
-    // velocity in px/ms (smoothed)
-    const v = (y - lastScrollY) / dt;
-    scrollVel = scrollVel * 0.85 + v * 0.15;
-
-    lastScrollY = y;
-    lastScrollT = now;
-    scrollY = y;
-  }
-
   function drawDot(d){
-    // soft glow + crisp dot (still circles)
-    const { r, a, col } = d;
-
-    // glow
     ctx.beginPath();
-    ctx.arc(d.x, d.y, r * 3.2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${a * 0.10})`;
+    ctx.arc(d.x, d.y, d.r * 3.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${d.a * 0.10})`;
     ctx.fill();
 
-    // core dot
     ctx.beginPath();
-    ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${a})`;
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${d.a})`;
     ctx.fill();
   }
 
   function tick(t){
-    const dt = Math.min(0.033, (t - lastT) / 1000); // cap for stability
+    const dt = Math.min(0.033, (t - lastT) / 1000);
     lastT = t;
 
     ctx.clearRect(0, 0, w, h);
 
-    // scroll parallax drift (feels like the bg reacts to your finger)
-    const scrollKick = scrollVel * 1200 * SCROLL_PARALLAX; // tuned for mobile
-
     for (let i = 0; i < dots.length; i++){
       const d = dots[i];
 
-      // rise upward continuously
       d.y -= d.rise * dt;
 
-      // micro sideways drift (not straight up)
       d.driftPhase += d.driftSpeed * dt;
       d.x += Math.sin(d.driftPhase) * d.driftAmp * dt;
 
-      // scroll reaction: slight opposite drift, plus tiny vertical nudge
-      d.x -= scrollKick * 0.06;
-      d.y += scrollKick * 0.02;
-
-      // wrap-around with new random x (keeps scatter)
       if (d.y < -30){
         dots[i] = makeDot(false);
         continue;
@@ -306,11 +265,11 @@ h1{font-size:42px; letter-spacing:3px}
   }
 
   window.addEventListener("resize", resize, { passive: true });
-  window.addEventListener("scroll", onScroll, { passive: true });
 
   resize();
   requestAnimationFrame(tick);
 })();
+</script>
 
 /* ---------- YOUR EXISTING SITE LOGIC (unchanged) ---------- */
 const products = Array.from({length:50},(_,i)=>({
