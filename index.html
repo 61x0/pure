@@ -6,456 +6,317 @@
 <title>RROLL</title>
 
 <style>
-* { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif }
-body { background:#0b0e11; color:#ffffff; overflow-x:hidden }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-/* STARFIELD BACKGROUND */
-#bg-stars{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  width:100%;
-  height:100%;
-  pointer-events:none;
+body {
+  background: #0b0e11;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* ---------- BACKGROUND ---------- */
+#bg-stars {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
-    radial-gradient(1200px 600px at 50% 10%, rgba(0,200,180,.10), transparent 55%),
-    radial-gradient(1000px 500px at 70% 70%, rgba(2,132,199,.08), transparent 55%),
+    radial-gradient(1200px 600px at 50% 10%, rgba(0,200,180,.12), transparent 55%),
+    radial-gradient(1000px 500px at 70% 70%, rgba(2,132,199,.10), transparent 55%),
     #0b0e11;
 }
 
-.top-banner{
-  background:linear-gradient(90deg,#0f766e,#0284c7);
-  text-align:center; padding:10px; font-size:13px
+/* ---------- TOP BAR ---------- */
+.top-banner {
+  background: linear-gradient(90deg, #0f766e, #0284c7);
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+  letter-spacing: .5px;
 }
 
-.header{display:flex; justify-content:space-between; padding:18px 20px}
+/* ---------- HEADER ---------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
 
-/* ---------------- ROLL ANIMATION SYSTEM (constant, not glitchy) ---------------- */
-.roll-text{
-  display:inline-flex;
-  align-items:baseline;
-  white-space:nowrap;
-  line-height:1;
-  color:#fff;
+/* LOGO */
+.logo {
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: #fff;
   text-shadow:
-    0 0 10px rgba(56,189,248,.18),
-    0 0 24px rgba(0,200,180,.10);
+    0 0 0 #0fb9b1,
+    0 0 12px rgba(0,200,180,.35);
+  -webkit-text-stroke: 1px rgba(0,200,180,.55);
 }
 
-.roll-text .ch{
-  display:inline-block;
-  transform-origin:50% 80%;
-  will-change: transform, opacity, filter;
-  animation-name: roll-cycle;
-  animation-timing-function: cubic-bezier(.45,0,.55,1);
-  animation-iteration-count: infinite;
-
-  /* per-instance defaults (override on .roll-hero/.roll-logo/.roll-product) */
-  animation-duration: var(--dur, 2.8s);
-  animation-delay: calc(var(--i, 0) * var(--step, .12s) + var(--phase, 0s));
+/* ---------- HERO ---------- */
+.hero {
+  text-align: center;
+  padding: 40px 20px 50px;
 }
 
-/* The “roll” motion: lift + slight tilt + settle (smooth loop) */
-@keyframes roll-cycle{
-  0%   { transform: translateY(0) rotate(0deg); opacity:.92; filter:none; }
-  25%  { transform: translateY(var(--lift, -4px)) rotate(var(--tiltA, -2.5deg)); opacity:1; }
-  50%  { transform: translateY(calc(var(--lift, -4px) * 1.35)) rotate(0deg); }
-  75%  { transform: translateY(calc(var(--lift, -4px) * .8)) rotate(var(--tiltB, 2.5deg)); }
-  100% { transform: translateY(0) rotate(0deg); opacity:.92; filter:none; }
-}
-
-/* Hero title: more present */
-.roll-hero{
-  --dur: 2.85s;
-  --step: .12s;
-  --lift: -4px;
-  --tiltA: -3deg;
-  --tiltB: 3deg;
-}
-
-/* Logo: calmer + slower */
-.roll-logo{
-  --dur: 4.6s;
-  --step: .14s;
-  --lift: -2px;
-  --tiltA: -2deg;
-  --tiltB: 2deg;
-  opacity:.96;
-}
-
-/* Product titles: subtle + slower; each title gets a different phase (set in JS) */
-.roll-product{
-  --dur: 5.2s;
-  --step: .07s;
-  --lift: -2px;
-  --tiltA: -1.6deg;
-  --tiltB: 1.6deg;
+/* STATIC HERO TITLE */
+.hero-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #ffffff;
+  -webkit-text-stroke: 1.4px rgba(0,200,180,.65);
   text-shadow:
-    0 0 8px rgba(56,189,248,.14),
-    0 0 18px rgba(0,200,180,.08);
+    0 0 18px rgba(0,200,180,.35),
+    0 0 32px rgba(2,132,199,.25);
 }
 
-/* Reduce motion friendly */
-@media (prefers-reduced-motion: reduce){
-  .roll-text .ch{ animation: none !important; }
+/* CUSTOM DICE */
+.dice {
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
 }
 
-/* ---------------- Rest of your styling ---------------- */
-.logo{
-  font-weight:800;
-  letter-spacing:2px;
+/* SUBTITLE */
+.subtitle {
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #9fbec7;
+  opacity: .9;
 }
 
-.hero{text-align:center; padding:30px 20px 40px}
-
-/* Keep your hero typography sizing but now applied to the roll container */
-.hero-title{
-  font-size:42px;
-  letter-spacing:3px;
+/* ---------- SEARCH ---------- */
+.search-box {
+  max-width: 520px;
+  margin: 32px auto;
+  display: flex;
+  background: #11161b;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.subtitle{color:#cbd5e1; font-size:14px; margin-top:10px}
-
-.search-box{
-  max-width:520px; margin:30px auto;
-  display:flex; background:#11161b; border-radius:16px; overflow:hidden
-}
-.search-box input{
-  flex:1; padding:16px; background:transparent; border:none; color:white; outline:none
-}
-.search-box button{
-  padding:0 22px; background:linear-gradient(180deg,#0f766e,#0284c7);
-  border:none; color:white; font-weight:600; cursor:pointer
+.search-box input {
+  flex: 1;
+  padding: 16px;
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
 }
 
-.categories{
-  display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:40px
-}
-.chip{
-  padding:10px 16px; border-radius:999px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  font-size:12px; letter-spacing:1px; cursor:pointer
-}
-.chip.active{background:linear-gradient(180deg,#0f766e,#0284c7); border:none}
-
-.products{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:20px; padding:0 20px 60px; max-width:1200px; margin:auto
-}
-.card{
-  background:#11161b; border-radius:16px; padding:16px;
-  border:1px solid rgba(255,255,255,.08)
-}
-.card img{
-  width:100%; height:140px; object-fit:cover;
-  border-radius:12px; margin-bottom:12px
+.search-box button {
+  padding: 0 24px;
+  background: linear-gradient(180deg, #0f766e, #0284c7);
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.product-title{font-size:15px; margin-bottom:6px}
-.card p{font-size:13px; color:#cbd5e1; margin-bottom:12px}
-.card button{
-  background:none; border:none; color:#38bdf8;
-  font-weight:600; cursor:pointer
+/* ---------- CATEGORIES ---------- */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
-.modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.7);
-  display:none; align-items:center; justify-content:center; z-index:10
-}
-.modal.active{display:flex}
-.modal-box{
-  background:#0f1418; width:92%; max-width:520px;
-  border-radius:18px; padding:22px; border:1px solid rgba(255,255,255,.1)
-}
-.modal-box img{
-  width:100%; height:180px; object-fit:cover;
-  border-radius:14px; margin-bottom:14px
-}
-.modal-box h3{margin-bottom:6px}
-.modal-box p{font-size:13px; color:#cbd5e1; margin-bottom:10px}
-.close{
-  text-align:right; font-size:13px; cursor:pointer; color:#94a3b8
+.chip {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
-.footer{
-  margin:60px 20px 30px;
-  background:#11161b; border-radius:16px;
-  padding:20px; text-align:center; border:1px solid rgba(255,255,255,.08)
+.chip.active {
+  background: linear-gradient(180deg, #0f766e, #0284c7);
+  border: none;
 }
-.footer-links{
-  display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:12px
+
+/* ---------- PRODUCTS ---------- */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 0 20px 60px;
+  max-width: 1200px;
+  margin: auto;
 }
-.footer-links a{
-  color:#94a3b8; font-size:12px; text-decoration:none
+
+.card {
+  background: #11161b;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.08);
 }
-.footer small{color:#94a3b8; font-size:11px}
+
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.product-title {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.card p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.card button {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- MODAL ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal.active { display: flex; }
+
+.modal-box {
+  background: #0f1418;
+  width: 92%;
+  max-width: 520px;
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.modal-box img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+
+.close {
+  text-align: right;
+  font-size: 13px;
+  cursor: pointer;
+  color: #94a3b8;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  margin: 60px 20px 30px;
+  background: #11161b;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: #94a3b8;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.footer small {
+  color: #94a3b8;
+  font-size: 11px;
+}
 </style>
 </head>
 
 <body>
 
-<canvas id="bg-stars" aria-hidden="true"></canvas>
+<div id="bg-stars"></div>
 
 <div class="top-banner">All Our Links Here → Join</div>
 
 <header class="header">
-  <!-- Logo (constant roll, calm) -->
-  <div class="logo roll-text roll-logo" id="logoText" aria-label="rroll"></div>
+  <div class="logo">RROLL</div>
 </header>
 
 <main class="hero">
-  <!-- Hero title (constant roll, more present) -->
-  <div class="roll-text roll-hero hero-title" id="heroTitle" aria-label="RROLL"></div>
-  <p class="subtitle">We rroll out free game 24/7</p>
+  <div class="hero-title">
+    RR
+    <!-- CUSTOM DICE SVG -->
+    <svg class="dice" viewBox="0 0 100 100">
+      <rect x="8" y="8" width="84" height="84" rx="18"
+        fill="white"
+        stroke="rgba(0,200,180,.85)"
+        stroke-width="6"/>
+      <circle cx="50" cy="50" r="7" fill="#0b0e11"/>
+      <circle cx="30" cy="30" r="7" fill="#0b0e11"/>
+      <circle cx="70" cy="70" r="7" fill="#0b0e11"/>
+    </svg>
+    LL
+  </div>
+
+  <div class="subtitle">FREE GAME • VERIFIED • 24/7</div>
 
   <div class="search-box">
-    <input id="search" placeholder="Search product..." />
+    <input placeholder="Search product..." />
     <button>Product</button>
   </div>
 
-  <div class="categories" id="categories"></div>
-</main>
-
-<section class="products" id="products"></section>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="close" onclick="closeModal()">Close</div>
-    <img id="modalImg" alt="">
-    <h3 id="modalTitle"></h3>
-    <p id="modalDesc"></p>
-    <p><strong>Warranty:</strong> <span id="modalWarranty"></span></p>
-    <p><strong>How to use:</strong> <span id="modalUse"></span></p>
+  <div class="categories">
+    <div class="chip active">ALL</div>
+    <div class="chip">TRAVEL</div>
+    <div class="chip">FLIGHTS</div>
+    <div class="chip">SHOPPING</div>
+    <div class="chip">STREAMING</div>
+    <div class="chip">HOTELS</div>
+    <div class="chip">GAS</div>
+    <div class="chip">FOOD</div>
+    <div class="chip">VPN</div>
   </div>
-</div>
+</main>
 
 <footer class="footer">
   <div class="footer-links">
-    <a href="#reviews">REVIEWS</a>
-    <a href="#tos">TOS</a>
-    <a href="https://discord.gg/nRUjf55dtj" target="_blank" rel="noopener">VOUCHES</a>
-    <a href="#bulk">BULK / DISCOUNTS</a>
-    <a href="#faqs">FAQS</a>
+    <a href="#">REVIEWS</a>
+    <a href="#">TOS</a>
+    <a href="https://discord.gg/nRUjf55dtj" target="_blank">VOUCHES</a>
+    <a href="#">BULK / DISCOUNTS</a>
+    <a href="#">FAQS</a>
   </div>
   <small>© 2025 RROLL. All rights reserved.</small>
 </footer>
-
-<script>
-/* ---------------- STARFIELD (seamless loop, no scroll, no pop/glitch) ---------------- */
-(() => {
-  const canvas = document.getElementById("bg-stars");
-  const ctx = canvas.getContext("2d", { alpha: true });
-
-  const DOT_SIZE_MIN = 0.9;
-  const DOT_SIZE_MAX = 1.4;
-  const OPACITY_MIN  = 0.18;
-  const OPACITY_MAX  = 0.55;
-
-  const DENSITY = 0.000085;
-  const RISE_MIN = 14;
-  const RISE_MAX = 34;
-
-  const TOP_FADE_BAND = 160;
-  const BOTTOM_FADE_BAND = 190;
-  const SPAWN_BELOW = 0.85;
-
-  const DRIFT_STRENGTH = 0.22;
-
-  let w = 0, h = 0, dpr = 1;
-  let dots = [];
-  let lastT = performance.now();
-
-  const rand = (min, max) => Math.random() * (max - min) + min;
-
-  function resize(){
-    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    w = Math.floor(window.innerWidth);
-    h = Math.floor(window.innerHeight);
-
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const count = Math.max(120, Math.floor(w * h * DENSITY));
-    dots = Array.from({ length: count }, () => makeDot(true));
-  }
-
-  function makeDot(initial=false){
-    const tint = Math.random();
-    const col = tint < 0.55 ? { r: 0, g: 200, b: 180 } : { r: 2, g: 132, b: 199 };
-
-    return {
-      x: rand(0, w),
-      y: initial ? rand(0, h) : (h + rand(40, h * SPAWN_BELOW)),
-      r: rand(DOT_SIZE_MIN, DOT_SIZE_MAX),
-      a: rand(OPACITY_MIN, OPACITY_MAX),
-      rise: rand(RISE_MIN, RISE_MAX),
-      phase: rand(0, Math.PI * 2),
-      speed: rand(0.6, 1.3),
-      amp: rand(6, 18) * DRIFT_STRENGTH,
-      col
-    };
-  }
-
-  function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
-
-  function fadeForY(y){
-    const topFade = clamp01((y - 0) / TOP_FADE_BAND);
-    const bottomFade = clamp01((h - y) / BOTTOM_FADE_BAND);
-    return Math.min(topFade, bottomFade);
-  }
-
-  function drawDot(d, alphaMul){
-    const a = d.a * alphaMul;
-
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, d.r * 3.2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${a * 0.10})`;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${d.col.r},${d.col.g},${d.col.b},${a})`;
-    ctx.fill();
-  }
-
-  function tick(t){
-    const dt = Math.min(0.033, (t - lastT) / 1000);
-    lastT = t;
-
-    ctx.clearRect(0, 0, w, h);
-
-    for (let i = 0; i < dots.length; i++){
-      const d = dots[i];
-
-      d.y -= d.rise * dt;
-      d.phase += d.speed * dt;
-      d.x += Math.sin(d.phase) * d.amp * dt;
-
-      if (d.x < -40) d.x = w + 40;
-      if (d.x > w + 40) d.x = -40;
-
-      if (d.y < -40){
-        dots[i] = makeDot(false);
-        continue;
-      }
-
-      const fade = fadeForY(d.y);
-      if (fade > 0.001) drawDot(d, fade);
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  window.addEventListener("resize", resize, { passive: true });
-  resize();
-  requestAnimationFrame(tick);
-})();
-
-/* ---------------- ROLL TEXT HELPERS (auto-split letters, constant motion) ---------------- */
-function renderRollText(el, text, phaseSeconds = 0){
-  // Build spans per character so we can offset timing without “glitch” artifacts.
-  // Keep spaces as non-breaking for safety.
-  const safe = String(text).replace(/ /g, "\u00A0");
-  el.innerHTML = "";
-  el.style.setProperty("--phase", `${phaseSeconds}s`);
-
-  for (let i = 0; i < safe.length; i++){
-    const span = document.createElement("span");
-    span.className = "ch";
-    span.style.setProperty("--i", i);
-    span.textContent = safe[i];
-    el.appendChild(span);
-  }
-}
-
-/* ---------------- SITE LOGIC (products + categories) ---------------- */
-const products = Array.from({length:50},(_,i)=>({
-  name:`Product ${i+1}`,
-  category:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8],
-  description:"Placeholder description. You will customize this later.",
-  warranty:"No warranty / replaceable if unused.",
-  usage:"Follow provided instructions after purchase.",
-  image:"https://picsum.photos/400/300?random="+(i+1)
-}));
-
-const cats=["ALL",...new Set(products.map(p=>p.category))];
-let active="ALL";
-
-const catEl=document.getElementById("categories");
-const prodEl=document.getElementById("products");
-const search=document.getElementById("search");
-
-// Initialize constant rolling titles (different phases so they’re not synced)
-renderRollText(document.getElementById("logoText"), "rroll", 0.35);
-renderRollText(document.getElementById("heroTitle"), "RROLL", 0.00);
-
-function renderCats(){
-  catEl.innerHTML=cats.map(c=>`<div class="chip ${c===active?"active":""}" data-cat="${c}">${c}</div>`).join("");
-}
-
-function escapeHtml(s){
-  return String(s)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function renderProducts(){
-  const q=search.value.toLowerCase();
-  const filtered = products.filter(p =>
-    (active==="ALL"||p.category===active) && p.name.toLowerCase().includes(q)
-  );
-
-  prodEl.innerHTML = filtered.map((p, idx) => {
-    // Unique phase per card so product titles don’t march in sync
-    const phase = ((idx % 11) * 0.23).toFixed(2);
-
-    // Build a roll-text container for the title (spans inserted after render)
-    return `
-      <div class="card" data-phase="${phase}">
-        <img src="${p.image}" alt="${escapeHtml(p.name)} product image">
-        <h2 class="product-title roll-text roll-product" data-roll-title="1">${escapeHtml(p.name)}</h2>
-        <p>${escapeHtml(p.description)}</p>
-        <button onclick='openModal(${JSON.stringify(p)})'>View →</button>
-      </div>
-    `;
-  }).join("");
-
-  // Convert each product title into rolling spans
-  const titles = prodEl.querySelectorAll('[data-roll-title="1"]');
-  titles.forEach((t, i) => {
-    const phase = Number((t.closest(".card")?.dataset.phase) || 0);
-    renderRollText(t, t.textContent, phase);
-  });
-}
-
-function openModal(p){
-  modal.classList.add("active");
-  modalImg.src=p.image;
-  modalImg.alt=p.name+" product image";
-  modalTitle.textContent=p.name;
-  modalDesc.textContent=p.description;
-  modalWarranty.textContent=p.warranty;
-  modalUse.textContent=p.usage;
-}
-function closeModal(){ modal.classList.remove("active") }
-
-catEl.onclick=e=>{
-  if(!e.target.dataset.cat) return;
-  active=e.target.dataset.cat;
-  renderCats(); renderProducts();
-};
-search.oninput=renderProducts;
-
-renderCats(); renderProducts();
-</script>
 
 </body>
 </html>
