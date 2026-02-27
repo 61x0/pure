@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <form id="add-product-form">
+    <h2>Add Product</h2>
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <label for="category">Category:</label>
+    <select id="category">
+      <option value="TRAVEL">TRAVEL</option>
+      <option value="FLIGHTS">FLIGHTS</option>
+      <option value="SHOPPING">SHOPPING</option>
+      <option value="STREAMING">STREAMING</option>
+      <option value="HOTELS">HOTELS</option>
+      <option value="GAS">GAS</option>
+      <option value="FOOD">FOOD</option>
+      <option value="VPN">VPN</option>
+    </select>
+    <label for="price">Price:</label>
+    <input type="number" id="price" step="0.01" required>
+    <button type="submit">Add Product</button>
+  </form>
+
+  <h2>Products</h2>
+  <table id="products-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script>
+    const productsTable = document.querySelector('#products-table tbody');
+    const addProductForm = document.getElementById('add-product-form');
+
+    function fetchProducts() {
+      fetch('http://localhost:3000/products')
+        .then(res => res.json())
+        .then(products => {
+          productsTable.innerHTML = '';
+          products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${product.id}</td>
+              <td>${product.name}</td>
+              <td>${product.category}</td>
+              <td>$${product.price.toFixed(2)}</td>
+              <td>
+                <button onclick="deleteProduct(${product.id})">Delete</button>
+              </td>
+            `;
+            productsTable.appendChild(row);
+          });
+        });
+    }
+
+    addProductForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const category = document.getElementById('category').value;
+      const price = parseFloat(document.getElementById('price').value);
+
+      fetch('http://localhost:3000/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, category, price })
+      }).then(() => {
+        fetchProducts();
+        addProductForm.reset();
+      });
+    });
+
+    function deleteProduct(id) {
+      fetch(`http://localhost:3000/products/${id}`, {
+        method: 'DELETE'
+      }).then(fetchProducts);
+    }
+
+    fetchProducts();
+  </script>
+</body>
+</html>

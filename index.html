@@ -36,7 +36,9 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
   font-size:22px;
   letter-spacing:2px;
   -webkit-text-stroke:1px rgba(0,200,180,.55);
-  text-shadow:0 0 14px rgba(0,200,180,.35)
+  text-shadow:0 0 14px rgba(0,200,180,.35);
+  text-decoration:none;
+  color:white
 }
 
 /* ---------- HERO ---------- */
@@ -106,7 +108,10 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
   border:1px solid rgba(255,255,255,.08);
   font-size:12px;
   letter-spacing:1px;
-  cursor:pointer
+  cursor:pointer;
+  color:white;
+  font-family:inherit;
+  font-weight:inherit;
 }
 .chip.active{
   background:linear-gradient(180deg,#0f766e,#0284c7);
@@ -211,7 +216,7 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
 <div class="top-banner">All Our Links Here → Join</div>
 
 <header class="header">
-  <div class="logo">RROLL</div>
+  <a href="/" class="logo">RROLL</a>
 </header>
 
 <main class="hero">
@@ -227,7 +232,7 @@ body{background:#0b0e11;color:#fff;overflow-x:hidden}
     LL
   </div>
 
-  <div class="subtitle">FREE GAME • VERIFIED • 24/7</div>
+  <p class="subtitle">FREE GAME • VERIFIED • 24/7</p>
 
   <div class="search-box">
     <input id="search" placeholder="Search product..." />
@@ -286,19 +291,24 @@ function anim(){
 resize();anim();onresize=resize;
 
 /* ---------- PRODUCTS ---------- */
-const products=[...Array(50)].map((_,i)=>({
-  name:`Product ${i+1}`,
-  cat:["TRAVEL","FLIGHTS","SHOPPING","STREAMING","HOTELS","GAS","FOOD","VPN"][i%8]
-}));
+let products = [];
 const cats=["ALL",...new Set(products.map(p=>p.cat))];
 let active="ALL";
+
+fetch('http://localhost:3000/products')
+  .then(res => res.json())
+  .then(data => {
+    products = data;
+    renderCats();
+    renderProducts();
+  });
 
 const catEl=document.getElementById("categories");
 const prodEl=document.getElementById("products");
 const search=document.getElementById("search");
 
 function renderCats(){
-  catEl.innerHTML=cats.map(c=>`<div class="chip ${c===active?"active":""}" data-c="${c}">${c}</div>`).join("");
+  catEl.innerHTML=cats.map(c=>`<button class="chip ${c===active?"active":""}" data-c="${c}">${c}</button>`).join("");
 }
 function renderProducts(){
   prodEl.innerHTML=products
@@ -308,7 +318,7 @@ function renderProducts(){
         <div class="logo-slot"></div>
         <div class="product-title">${p.name}</div>
         <p>Instant delivery • Verified</p>
-        <button onclick="openModal('${p.name}')">Purchase | $3.00</button>
+        <button data-product-name='${p.name}'>Purchase | $3.00</button>
       </div>
     `).join("");
 }
@@ -317,6 +327,12 @@ catEl.onclick=e=>{
   if(e.target.dataset.c){
     active=e.target.dataset.c;
     renderCats();renderProducts();
+  }
+};
+
+prodEl.onclick=e=>{
+  if(e.target.dataset.productName){
+    openModal(e.target.dataset.productName);
   }
 };
 search.oninput=renderProducts;

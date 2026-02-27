@@ -1,0 +1,22 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "category": "TRAVEL",
+      "price": 3.00
+    },
+    {
+      "id": 2,
+      "name": "Product 2",
+      "category": "FLIGHTS",
+      "price": 3.00
+    },
+    {
+      "id": 3,
+      "name": "Product 3",
+      "category": "SHOPPING",
+      "price": 3.00
+    }
+  ]
+}
