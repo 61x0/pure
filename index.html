@@ -8,17 +8,11 @@
   <style>
     :root {
       --bg: #050505;
-      --bg2: #0a0a0a;
-      --panel: rgba(255,255,255,0.05);
-      --panel-2: rgba(255,255,255,0.08);
       --border: rgba(255,255,255,0.12);
       --text: #ffffff;
       --muted: rgba(255,255,255,0.62);
       --muted-2: rgba(255,255,255,0.38);
-      --glow: rgba(255,255,255,0.14);
       --shadow: 0 10px 30px rgba(0,0,0,0.45);
-      --radius: 18px;
-      --radius-sm: 12px;
       --max: 820px;
     }
 
@@ -110,9 +104,6 @@
       font-size: 0.95rem;
       color: #fff;
       text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
       text-shadow: 0 0 18px rgba(255,255,255,0.12);
       animation: logoGlitch 5s infinite;
     }
@@ -189,14 +180,6 @@
       pointer-events: none;
     }
 
-    .hero-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
     .hero-label {
       display: inline-flex;
       align-items: center;
@@ -218,6 +201,14 @@
       flex: 0 0 auto;
     }
 
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
     .title-wrap {
       flex: 1;
       min-width: 0;
@@ -230,11 +221,8 @@
       letter-spacing: 0.22em;
       font-weight: 900;
       text-transform: uppercase;
-      position: relative;
       display: inline-block;
-      text-shadow:
-        0 0 30px rgba(255,255,255,0.08),
-        0 0 70px rgba(255,255,255,0.04);
+      text-shadow: 0 0 30px rgba(255,255,255,0.08), 0 0 70px rgba(255,255,255,0.04);
       animation: titleGlitch 8s infinite;
     }
 
@@ -250,9 +238,7 @@
       transform: rotate(10deg) translateY(0.04em);
       position: relative;
       vertical-align: middle;
-      box-shadow:
-        0 0 16px rgba(255,255,255,0.1),
-        inset 0 0 12px rgba(255,255,255,0.05);
+      box-shadow: 0 0 16px rgba(255,255,255,0.1), inset 0 0 12px rgba(255,255,255,0.05);
     }
 
     .title .dice-o::before,
@@ -263,14 +249,20 @@
       height: 0.12em;
       background: #fff;
       border-radius: 50%;
-      box-shadow:
-        0.25em 0.25em 0 0 #fff,
-        -0.25em -0.25em 0 0 #fff;
+      box-shadow: 0.25em 0.25em 0 0 #fff, -0.25em -0.25em 0 0 #fff;
+    }
+
+    .subtext {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.96rem;
+      max-width: 620px;
     }
 
     .hero-right {
+      min-width: 74px;
       text-align: right;
-      min-width: 72px;
     }
 
     .count-box {
@@ -278,7 +270,6 @@
       background: rgba(255,255,255,0.045);
       padding: 11px 12px;
       border-radius: 16px;
-      min-width: 74px;
       box-shadow: var(--shadow);
     }
 
@@ -295,14 +286,6 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-    }
-
-    .subtext {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 0.96rem;
-      max-width: 620px;
     }
 
     .hero-actions {
@@ -323,7 +306,7 @@
       border-radius: 14px;
       padding: 12px 14px;
       font-size: 0.9rem;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
     .ghost-btn {
@@ -336,11 +319,6 @@
       background: #fff;
       color: #000;
       box-shadow: 0 12px 30px rgba(255,255,255,0.08);
-    }
-
-    .ghost-btn:active,
-    .solid-btn:active {
-      transform: scale(0.98);
     }
 
     .toolbar {
@@ -372,7 +350,8 @@
       font-size: 0.98rem;
     }
 
-    .search-box input::placeholder {
+    .search-box input::placeholder,
+    .link-input::placeholder {
       color: rgba(255,255,255,0.35);
     }
 
@@ -405,7 +384,6 @@
     .filter-btn.active {
       background: #fff;
       color: #000;
-      border-color: rgba(255,255,255,0.4);
     }
 
     .stats {
@@ -475,8 +453,7 @@
     .card {
       position: relative;
       border: 1px solid var(--border);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
       border-radius: 18px;
       padding: 14px;
       box-shadow: var(--shadow);
@@ -497,8 +474,7 @@
     .card:hover {
       transform: translateY(-2px);
       border-color: rgba(255,255,255,0.2);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
     }
 
     .card-top {
@@ -547,12 +523,14 @@
       box-shadow: 0 0 18px rgba(255,255,255,0.08);
     }
 
-    .badge.missing {
+    .badge.missing,
+    .badge.editing {
       background: rgba(255,255,255,0.04);
       color: #fff;
     }
 
-    .actions {
+    .actions,
+    .link-editor {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
@@ -561,7 +539,9 @@
 
     .visit-btn,
     .copy-btn,
-    .placeholder-btn {
+    .placeholder-btn,
+    .editor-btn,
+    .cancel-btn {
       border: 1px solid var(--border);
       border-radius: 14px;
       min-height: 48px;
@@ -571,31 +551,59 @@
     }
 
     .visit-btn,
-    .placeholder-btn {
+    .placeholder-btn,
+    .editor-btn,
+    .cancel-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
       padding: 0 14px;
+      cursor: pointer;
     }
 
-    .visit-btn {
+    .visit-btn,
+    .editor-btn.primary {
       background: #fff;
       color: #000;
     }
 
-    .copy-btn {
+    .copy-btn,
+    .cancel-btn,
+    .editor-btn.secondary,
+    .placeholder-btn {
       appearance: none;
-      cursor: pointer;
       background: rgba(255,255,255,0.04);
       color: #fff;
       padding: 0 14px;
       min-width: 88px;
+      cursor: pointer;
     }
 
-    .placeholder-btn {
-      background: rgba(255,255,255,0.035);
-      color: rgba(255,255,255,0.5);
+    .link-input-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .link-input {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      outline: none;
+      padding: 0 14px;
+      font-size: 0.92rem;
+      box-shadow: var(--shadow);
+    }
+
+    .editor-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .waitlist {
@@ -698,13 +706,17 @@
 
       .title {
         letter-spacing: 0.16em;
-      }      
-      
-      .actions {
+      }
+
+      .actions,
+      .link-editor,
+      .editor-actions {
         grid-template-columns: 1fr;
       }
 
-      .copy-btn {
+      .copy-btn,
+      .cancel-btn,
+      .editor-btn {
         width: 100%;
       }
     }
@@ -742,20 +754,16 @@
   <main class="wrap">
     <div class="topbar">
       <div class="brand-mini">RROLL</div>
-      <div class="status-pill" id="liveStatus">Referral Hub / Live</div>
+      <div class="status-pill">Referral Hub / Live</div>
     </div>
 
     <section class="hero">
       <div class="hero-label"><span class="dot"></span> Organized referral tracker</div>
-
       <div class="hero-top">
         <div class="title-wrap">
           <h1 class="title">RR<span class="dice-o"></span>LL</h1>
-          <p class="subtext">
-            Clean dark referral hub with search, sorting, copy buttons, completed vs missing tracking, and a full mobile layout that still looks hard.
-          </p>
+          <p class="subtext">Clean dark referral hub with search, tracking, copy buttons, and on-phone link saving for the casinos you haven’t filled in yet.</p>
         </div>
-
         <div class="hero-right">
           <div class="count-box">
             <strong id="heroDoneCount">0</strong>
@@ -763,7 +771,6 @@
           </div>
         </div>
       </div>
-
       <div class="hero-actions">
         <a href="#completedSection" class="solid-btn">Completed Links</a>
         <a href="#missingSection" class="ghost-btn">Missing Links</a>
@@ -775,8 +782,7 @@
       <div class="search-box">
         <input id="searchInput" type="text" placeholder="Search casino name..." autocomplete="off" />
       </div>
-
-      <div class="filter-box" id="filterBox">
+      <div class="filter-box">
         <button class="filter-btn active" data-filter="all" type="button">All</button>
         <button class="filter-btn" data-filter="done" type="button">Done</button>
         <button class="filter-btn" data-filter="missing" type="button">Missing</button>
@@ -784,18 +790,9 @@
     </section>
 
     <section class="stats">
-      <div class="stat-card">
-        <span class="kicker">Total</span>
-        <strong id="totalCount">0</strong>
-      </div>
-      <div class="stat-card">
-        <span class="kicker">Completed</span>
-        <strong id="doneCount">0</strong>
-      </div>
-      <div class="stat-card">
-        <span class="kicker">Missing</span>
-        <strong id="missingCount">0</strong>
-      </div>
+      <div class="stat-card"><span class="kicker">Total</span><strong id="totalCount">0</strong></div>
+      <div class="stat-card"><span class="kicker">Completed</span><strong id="doneCount">0</strong></div>
+      <div class="stat-card"><span class="kicker">Missing</span><strong id="missingCount">0</strong></div>
     </section>
 
     <section class="section" id="completedSection">
@@ -822,17 +819,15 @@
       <div class="waitlist">lucky party waitlist</div>
     </section>
 
-    <div class="empty-state" id="emptyState">
-      Nothing matched your search.
-    </div>
+    <div class="empty-state" id="emptyState">Nothing matched your search.</div>
 
-    <footer class="footer">
-      RROLL Referral Hub
-    </footer>
+    <footer class="footer">RROLL Referral Hub</footer>
   </main>
 
   <script>
-    const casinos = [
+    const STORAGE_KEY = "rroll-referral-links-v2";
+
+    const baseCasinos = [
       { name: "wowvegas", status: "done", url: "https://www.wowvegas.com/?raf=9598726", note: "link added" },
       { name: "luckyrush", status: "done", url: "https://luckyrush.io/register?referral=4otve", note: "link added" },
       { name: "stake.com + stake.us", status: "done", url: "https://luckystake.com/?c=68436_4T8HC6LV", note: "link added" },
@@ -849,7 +844,6 @@
       { name: "luckyhands", status: "done", url: "https://luckyhands.com/sign-up?code=bc9f512f-392d-45a3-934d-eeee284f1f10", note: "link added" },
       { name: "taosweeps", status: "done", url: "https://taosweeps.com/register?referral=vjq0k", note: "link added" },
       { name: "havanafortuna", status: "done", url: "https://havanafortuna.com/en/sign-up?promo=1owetroop", note: "link added" },
-
       { name: "crown coins casino", status: "missing" },
       { name: "roobet", status: "missing" },
       { name: "rainbet", status: "missing" },
@@ -910,6 +904,36 @@
 
     let activeFilter = "all";
     let searchTerm = "";
+    let editingName = null;
+    let casinos = hydrateCasinos();
+
+    function hydrateCasinos() {
+      const saved = loadSavedLinks();
+      return baseCasinos.map(item => {
+        const savedItem = saved[item.name];
+        if (!savedItem) return { ...item };
+        return {
+          ...item,
+          status: savedItem.url ? "done" : item.status,
+          url: savedItem.url || item.url,
+          note: savedItem.note || item.note || "saved on device"
+        };
+      });
+    }
+
+    function loadSavedLinks() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveLinkData(name, url) {
+      const existing = loadSavedLinks();
+      existing[name] = { url, note: "saved on device" };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    }
 
     function formatName(name) {
       return name
@@ -918,27 +942,53 @@
         .join(" ");
     }
 
+    function isValidUrl(value) {
+      try {
+        const parsed = new URL(value.trim());
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
+      } catch {
+        return false;
+      }
+    }
+
     function makeCard(item) {
       const card = document.createElement("article");
       card.className = "card";
       card.dataset.status = item.status;
       card.dataset.name = item.name.toLowerCase();
 
-      const badgeClass = item.status === "done" ? "badge done" : "badge missing";
-      const badgeText = item.status === "done" ? "Completed" : "Missing";
-      const subText = item.status === "done"
-        ? (item.note || "referral link saved")
-        : "still need to grab link";
+      const isEditing = editingName === item.name;
+      const badgeClass = item.status === "done" ? "badge done" : isEditing ? "badge editing" : "badge missing";
+      const badgeText = item.status === "done" ? "Completed" : isEditing ? "Editing" : "Missing";
+      const subText = item.status === "done" ? (item.note || "referral link saved") : isEditing ? "paste the referral link below, then save it" : "tap add link to paste your referral URL";
 
-      const actionHtml = item.status === "done"
-        ? `
-          <a class="visit-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">Open Link</a>
-          <button class="copy-btn" type="button" data-copy="${item.url.replace(/"/g, "&quot;")}">Copy</button>
-        `
-        : `
-          <div class="placeholder-btn">No Link Yet</div>
-          <button class="copy-btn" type="button" data-copy="${item.name.replace(/"/g, "&quot;")}">Copy Name</button>
+      let actionHtml = "";
+
+      if (item.status === "done") {
+        actionHtml = `
+          <div class="actions">
+            <a class="visit-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">Open Link</a>
+            <button class="copy-btn" type="button" data-copy="${item.url.replace(/"/g, "&quot;")}">Copy</button>
+          </div>
         `;
+      } else if (isEditing) {
+        actionHtml = `
+          <div class="link-input-wrap">
+            <input class="link-input" type="url" data-link-input="${item.name}" placeholder="Paste referral link here..." />
+            <div class="editor-actions">
+              <button class="editor-btn primary" type="button" data-save-link="${item.name}">Save</button>
+              <button class="cancel-btn" type="button" data-cancel-link="${item.name}">Cancel</button>
+            </div>
+          </div>
+        `;
+      } else {
+        actionHtml = `
+          <div class="actions">
+            <button class="editor-btn secondary" type="button" data-open-editor="${item.name}">Add Link</button>
+            <button class="copy-btn" type="button" data-copy="${item.name.replace(/"/g, "&quot;")}">Copy Name</button>
+          </div>
+        `;
+      }
 
       card.innerHTML = `
         <div class="card-top">
@@ -948,9 +998,7 @@
           </div>
           <div class="${badgeClass}">${badgeText}</div>
         </div>
-        <div class="actions">
-          ${actionHtml}
-        </div>
+        ${actionHtml}
       `;
 
       return card;
@@ -961,6 +1009,59 @@
         const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
         const matchesFilter = activeFilter === "all" ? true : item.status === activeFilter;
         return matchesSearch && matchesFilter;
+      });
+    }
+
+    function bindCardActions() {
+      document.querySelectorAll(".copy-btn").forEach(button => {
+        button.onclick = () => copyText(button.dataset.copy, button);
+      });
+
+      document.querySelectorAll("[data-open-editor]").forEach(button => {
+        button.onclick = () => {
+          editingName = button.dataset.openEditor;
+          render();
+          requestAnimationFrame(() => {
+            const input = document.querySelector(`[data-link-input="${CSS.escape(editingName)}"]`);
+            if (input) input.focus();
+          });
+        };
+      });
+
+      document.querySelectorAll("[data-cancel-link]").forEach(button => {
+        button.onclick = () => {
+          editingName = null;
+          render();
+        };
+      });
+
+      document.querySelectorAll("[data-save-link]").forEach(button => {
+        button.onclick = () => {
+          const name = button.dataset.saveLink;
+          const input = document.querySelector(`[data-link-input="${CSS.escape(name)}"]`);
+          if (!input) return;
+          const value = input.value.trim();
+          if (!isValidUrl(value)) {
+            input.value = "";
+            input.placeholder = "Paste a real https:// link...";
+            input.focus();
+            return;
+          }
+          saveLinkData(name, value);
+          casinos = hydrateCasinos();
+          editingName = null;
+          render();
+        };
+      });
+
+      document.querySelectorAll(".link-input").forEach(input => {
+        input.addEventListener("keydown", event => {
+          if (event.key === "Enter") {
+            const name = input.dataset.linkInput;
+            const saveButton = document.querySelector(`[data-save-link="${CSS.escape(name)}"]`);
+            if (saveButton) saveButton.click();
+          }
+        });
       });
     }
 
@@ -983,7 +1084,6 @@
       doneCount.textContent = done;
       missingCount.textContent = missingTotal;
       heroDoneCount.textContent = done;
-
       completedVisibleCount.textContent = `${completed.length} visible`;
       missingVisibleCount.textContent = `${missing.length} visible`;
 
@@ -992,7 +1092,7 @@
       document.getElementById("completedSection").classList.toggle("hidden", completed.length === 0);
       document.getElementById("missingSection").classList.toggle("hidden", missing.length === 0);
 
-      bindCopyButtons();
+      bindCardActions();
     }
 
     async function copyText(value, button) {
@@ -1000,10 +1100,8 @@
         await navigator.clipboard.writeText(value);
         const oldText = button.textContent;
         button.textContent = "Copied";
-        setTimeout(() => {
-          button.textContent = oldText;
-        }, 1200);
-      } catch (err) {
+        setTimeout(() => { button.textContent = oldText; }, 1200);
+      } catch {
         const temp = document.createElement("textarea");
         temp.value = value;
         document.body.appendChild(temp);
@@ -1012,16 +1110,8 @@
         document.body.removeChild(temp);
         const oldText = button.textContent;
         button.textContent = "Copied";
-        setTimeout(() => {
-          button.textContent = oldText;
-        }, 1200);
+        setTimeout(() => { button.textContent = oldText; }, 1200);
       }
-    }
-
-    function bindCopyButtons() {
-      document.querySelectorAll(".copy-btn").forEach(button => {
-        button.onclick = () => copyText(button.dataset.copy, button);
-      });
     }
 
     searchInput.addEventListener("input", e => {
@@ -1038,12 +1128,11 @@
       });
     });
 
-    copyCompletedBtn.addEventListener("click", async () => {
+    copyCompletedBtn.addEventListener("click", () => {
       const completedLinks = casinos
         .filter(item => item.status === "done")
         .map(item => `${formatName(item.name)} - ${item.url}${item.note ? ` (${item.note})` : ""}`)
         .join("\n");
-
       copyText(completedLinks, copyCompletedBtn);
     });
 
@@ -1052,22 +1141,22 @@
     const canvas = document.getElementById("particle-canvas");
     const ctx = canvas.getContext("2d");
     let particles = [];
-    let particleCount = 70;
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
-      canvas.height = window.innerHeight * Math.min(window.devicePixelRatio || 1, 2);
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * ratio;
+      canvas.height = window.innerHeight * ratio;
       canvas.style.width = window.innerWidth + "px";
       canvas.style.height = window.innerHeight + "px";
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(Math.min(window.devicePixelRatio || 1, 2), Math.min(window.devicePixelRatio || 1, 2));
+      ctx.scale(ratio, ratio);
       buildParticles();
     }
 
     function buildParticles() {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      particleCount = Math.max(34, Math.min(90, Math.floor(w / 18)));
+      const particleCount = Math.max(34, Math.min(90, Math.floor(w / 18)));
       particles = Array.from({ length: particleCount }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -1081,20 +1170,17 @@
       const w = window.innerWidth;
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
-
       for (const p of particles) {
         p.y -= p.speed;
         if (p.y < -8) {
           p.y = h + 8;
           p.x = Math.random() * w;
         }
-
         ctx.beginPath();
         ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
-
       requestAnimationFrame(animateParticles);
     }
 
