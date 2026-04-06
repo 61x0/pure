@@ -18,14 +18,17 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
     body {
-      margin: 0; min-height: 100vh;
+      margin: 0;
+      min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       background:
         radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06), transparent 20%),
         radial-gradient(circle at 82% 18%, rgba(255,255,255,0.04), transparent 24%),
         radial-gradient(circle at 30% 85%, rgba(255,255,255,0.04), transparent 20%),
         linear-gradient(180deg, #030303 0%, #070707 45%, #030303 100%);
-      color: var(--text); overflow-x: hidden; position: relative;
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
     }
     #particle-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.9; }
     .noise {
@@ -35,7 +38,8 @@
         radial-gradient(circle at 80% 60%, rgba(255,255,255,0.14) 0.4px, transparent 0.7px),
         radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px),
         radial-gradient(circle at 70% 20%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px);
-      background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px; mix-blend-mode: screen;
+      background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px;
+      mix-blend-mode: screen;
     }
     .scanlines {
       position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.08;
@@ -138,15 +142,13 @@
     .casino-row { display: flex; align-items: center; gap: 12px; }
     .casino-logo {
       width: 34px; height: 34px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
-      box-shadow: inset 0 0 8px rgba(255,255,255,0.04);
-      object-fit: cover; flex: 0 0 auto;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.04); object-fit: cover; flex: 0 0 auto;
     }
     .casino-name { margin: 0; font-size: 1.03rem; line-height: 1.2; font-weight: 800; letter-spacing: 0.02em; word-break: break-word; }
     .casino-sub { margin-top: 5px; color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
     .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .mini-tag {
-      display: inline-flex; align-items: center; justify-content: center;
-      border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.035); color: rgba(255,255,255,0.74);
+      display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.035); color: rgba(255,255,255,0.74);
       border-radius: 999px; padding: 7px 10px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
     }
     .badge {
@@ -154,9 +156,7 @@
     }
     .badge.done { background: rgba(255,255,255,0.95); color: #000; box-shadow: 0 0 18px rgba(255,255,255,0.08); }
     .badge.missing, .badge.editing { background: rgba(255,255,255,0.04); color: #fff; }
-    .actions, .editor-actions {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: stretch;
-    }
+    .actions, .editor-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
     .visit-btn, .copy-btn, .placeholder-btn, .editor-btn, .cancel-btn {
       border: 1px solid var(--border); border-radius: 14px; min-height: 48px; font-weight: 700; font-size: 0.9rem; transition: 0.2s ease;
     }
@@ -164,12 +164,8 @@
       display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 0 14px; cursor: pointer;
     }
     .visit-btn, .editor-btn.primary { background: #fff; color: #000; }
-    .copy-btn, .cancel-btn, .editor-btn.secondary, .placeholder-btn {
-      appearance: none; background: rgba(255,255,255,0.04); color: #fff; padding: 0 14px; cursor: pointer;
-    }
-    .editor-btn.disabled {
-      background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.42); cursor: not-allowed;
-    }
+    .copy-btn, .cancel-btn, .editor-btn.secondary, .placeholder-btn { appearance: none; background: rgba(255,255,255,0.04); color: #fff; padding: 0 14px; cursor: pointer; }
+    .editor-btn.disabled { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.42); cursor: not-allowed; }
     .link-input-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
     .link-input {
       width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255,255,255,0.04);
@@ -185,13 +181,8 @@
     @keyframes ghost2 { 0%, 89%, 100% { opacity: 0; } 90% { opacity: 0.35; } 91% { opacity: 0; } 92% { opacity: 0.2; } }
     @keyframes logoGlitch { 0%, 91%, 100% { transform: translate(0, 0); } 92% { transform: translate(1px, -1px); } 93% { transform: translate(-1px, 1px); } 94% { transform: translate(0, 0); } }
     @keyframes titleGlitch { 0%, 96%, 100% { transform: translate(0,0); filter: none; } 96.5% { transform: translate(1px, -1px); } 97% { transform: translate(-1px, 1px); } 97.5% { transform: translate(1px, 0); } 98% { transform: translate(0,0); } }
-    @media (min-width: 640px) {
-      .toolbar { grid-template-columns: 1.2fr 1fr; }
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 820px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (min-width: 640px) { .toolbar { grid-template-columns: 1.2fr 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 820px) { .stats { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 639px) {
       .hero-top { flex-direction: column; }
       .hero-right { width: 100%; text-align: left; }
@@ -311,7 +302,6 @@
       { name: "luckyhands", category: "other", status: "done", logoDomain: "luckyhands.com", url: "https://luckyhands.com/sign-up?code=bc9f512f-392d-45a3-934d-eeee284f1f10", note: "link added" },
       { name: "taosweeps", category: "sweepstakes", status: "done", logoDomain: "taosweeps.com", url: "https://taosweeps.com/register?referral=vjq0k", note: "link added" },
       { name: "havanafortuna", category: "sweepstakes", status: "done", logoDomain: "havanafortuna.com", url: "https://havanafortuna.com/en/sign-up?promo=1owetroop", note: "link added" },
-
       { name: "crown coins casino", category: "sweepstakes", status: "missing", logoDomain: "crowncoinscasino.com" },
       { name: "roobet", category: "crypto", status: "missing", logoDomain: "roobet.com" },
       { name: "rainbet", category: "crypto", status: "missing", logoDomain: "rainbet.com" },
@@ -400,11 +390,7 @@
     }
 
     function loadSavedLinks() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      } catch {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
     }
 
     function saveLinkData(name, url) {
@@ -414,10 +400,7 @@
     }
 
     function formatName(name) {
-      return name
-        .split(" ")
-        .map(word => word.length <= 3 && !word.includes(".") ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+      return name.split(" ").map(word => word.length <= 3 && !word.includes(".") ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     }
 
     function categoryLabel(category) {
@@ -426,9 +409,18 @@
       return "Other";
     }
 
+    function normalizeUrl(value) {
+      let cleaned = (value || "").trim();
+      if (!cleaned) return "";
+      if (!/^https?:\/\//i.test(cleaned)) {
+        cleaned = `https://${cleaned.replace(/^\/+/, "")}`;
+      }
+      return cleaned;
+    }
+
     function isValidUrl(value) {
       try {
-        const parsed = new URL(value.trim());
+        const parsed = new URL(normalizeUrl(value));
         return parsed.protocol === "http:" || parsed.protocol === "https:";
       } catch {
         return false;
@@ -449,21 +441,17 @@
       const isEditing = editingName === item.name;
       const badgeClass = item.status === "done" ? "badge done" : isEditing ? "badge editing" : "badge missing";
       const badgeText = item.status === "done" ? "Completed" : isEditing ? "Editing" : "Missing";
-      const subText = item.status === "done"
-        ? (item.note || "referral link saved")
-        : isEditing
-          ? "paste the referral link below, then save it"
-          : "tap add link to paste your referral URL";
-
+      const subText = item.status === "done" ? (item.note || "referral link saved") : isEditing ? "paste the referral link below, then save it" : "tap add link to paste your referral URL";
       const existingUrl = item.url || "";
       let actionHtml = "";
 
       if (isEditing) {
+        const normalizedExisting = existingUrl || "";
         actionHtml = `
           <div class="link-input-wrap">
-            <input class="link-input" type="url" data-link-input="${item.name}" value="${existingUrl.replace(/"/g, "&quot;")}" placeholder="Paste referral link here..." />
+            <input class="link-input" type="text" inputmode="url" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" data-link-input="${item.name}" value="${normalizedExisting.replace(/"/g, "&quot;")}" placeholder="Paste referral link here..." />
             <div class="editor-actions">
-              <button class="editor-btn primary ${isValidUrl(existingUrl) ? "" : "disabled"}" type="button" data-save-link="${item.name}">${isValidUrl(existingUrl) ? "Save Link" : "Paste Link"}</button>
+              <button class="editor-btn primary ${isValidUrl(normalizedExisting) ? "" : "disabled"}" type="button" data-save-link="${item.name}">${isValidUrl(normalizedExisting) ? "Save Link" : "Paste Link"}</button>
               <button class="cancel-btn" type="button" data-cancel-link="${item.name}">Cancel</button>
             </div>
           </div>
@@ -505,17 +493,13 @@
         </div>
         ${actionHtml}
       `;
-
       return card;
     }
 
     function getFilteredData() {
       return casinos.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
-        const matchesFilter =
-          activeFilter === "all" ? true :
-          activeFilter === "done" || activeFilter === "missing" ? item.status === activeFilter :
-          item.category === activeFilter;
+        const matchesFilter = activeFilter === "all" ? true : activeFilter === "done" || activeFilter === "missing" ? item.status === activeFilter : item.category === activeFilter;
         return matchesSearch && matchesFilter;
       });
     }
@@ -556,24 +540,21 @@
       });
 
       document.querySelectorAll("[data-cancel-link]").forEach(button => {
-        button.onclick = () => {
-          editingName = null;
-          render();
-        };
+        button.onclick = () => { editingName = null; render(); };
       });
 
       document.querySelectorAll("[data-save-link]").forEach(button => {
         button.onclick = () => {
-          if (button.classList.contains("disabled")) return;
           const name = button.dataset.saveLink;
           const input = document.querySelector(`[data-link-input="${CSS.escape(name)}"]`);
           if (!input) return;
-          const value = input.value.trim();
+          const value = normalizeUrl(input.value);
           if (!isValidUrl(value)) {
             updateSaveButtonState(input);
             input.focus();
             return;
           }
+          input.value = value;
           saveLinkData(name, value);
           casinos = hydrateCasinos();
           editingName = null;
@@ -583,6 +564,13 @@
 
       document.querySelectorAll(".link-input").forEach(input => {
         input.addEventListener("input", () => updateSaveButtonState(input));
+        input.addEventListener("blur", () => {
+          const normalized = normalizeUrl(input.value);
+          if (normalized && isValidUrl(normalized)) {
+            input.value = normalized;
+            updateSaveButtonState(input);
+          }
+        });
         input.addEventListener("keydown", event => {
           if (event.key === "Enter") {
             const name = input.dataset.linkInput;
@@ -596,32 +584,26 @@
     function render() {
       completedGrid.innerHTML = "";
       missingGrid.innerHTML = "";
-
       const filtered = getFilteredData();
       const completed = sortCasinos(filtered.filter(item => item.status === "done"));
       const missing = sortCasinos(filtered.filter(item => item.status === "missing"));
-
       completed.forEach(item => completedGrid.appendChild(makeCard(item)));
       missing.forEach(item => missingGrid.appendChild(makeCard(item)));
 
       const total = casinos.length;
       const done = casinos.filter(item => item.status === "done").length;
       const missingTotal = casinos.filter(item => item.status === "missing").length;
-
       totalCount.textContent = total;
       doneCount.textContent = done;
       missingCount.textContent = missingTotal;
       heroDoneCount.textContent = done;
       activeCategoryCount.textContent = activeFilter === "all" ? "All" : (activeFilter === "done" || activeFilter === "missing" ? formatName(activeFilter) : categoryLabel(activeFilter));
-
       completedVisibleCount.textContent = `${completed.length} visible`;
       missingVisibleCount.textContent = `${missing.length} visible`;
-
       const noResults = filtered.length === 0;
       emptyState.style.display = noResults ? "block" : "none";
       document.getElementById("completedSection").classList.toggle("hidden", completed.length === 0);
       document.getElementById("missingSection").classList.toggle("hidden", missing.length === 0);
-
       bindCardActions();
     }
 
@@ -644,11 +626,7 @@
       }
     }
 
-    searchInput.addEventListener("input", e => {
-      searchTerm = e.target.value;
-      render();
-    });
-
+    searchInput.addEventListener("input", e => { searchTerm = e.target.value; render(); });
     filterButtons.forEach(button => {
       button.addEventListener("click", () => {
         filterButtons.forEach(btn => btn.classList.remove("active"));
@@ -657,12 +635,8 @@
         render();
       });
     });
-
     copyCompletedBtn.addEventListener("click", () => {
-      const completedLinks = casinos
-        .filter(item => item.status === "done")
-        .map(item => `${formatName(item.name)} - ${item.url}${item.note ? ` (${item.note})` : ""}`)
-        .join("\n");
+      const completedLinks = casinos.filter(item => item.status === "done").map(item => `${formatName(item.name)} - ${item.url}${item.note ? ` (${item.note})` : ""}`).join("\n");
       copyText(completedLinks, copyCompletedBtn);
     });
 
@@ -671,7 +645,6 @@
     const canvas = document.getElementById("particle-canvas");
     const ctx = canvas.getContext("2d");
     let particles = [];
-
     function resizeCanvas() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = window.innerWidth * ratio;
@@ -682,30 +655,19 @@
       ctx.scale(ratio, ratio);
       buildParticles();
     }
-
     function buildParticles() {
       const w = window.innerWidth;
       const h = window.innerHeight;
       const particleCount = Math.max(34, Math.min(90, Math.floor(w / 18)));
-      particles = Array.from({ length: particleCount }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.8 + 0.4,
-        speed: Math.random() * 0.45 + 0.12,
-        alpha: Math.random() * 0.65 + 0.15
-      }));
+      particles = Array.from({ length: particleCount }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.8 + 0.4, speed: Math.random() * 0.45 + 0.12, alpha: Math.random() * 0.65 + 0.15 }));
     }
-
     function animateParticles() {
       const w = window.innerWidth;
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
       for (const p of particles) {
         p.y -= p.speed;
-        if (p.y < -8) {
-          p.y = h + 8;
-          p.x = Math.random() * w;
-        }
+        if (p.y < -8) { p.y = h + 8; p.x = Math.random() * w; }
         ctx.beginPath();
         ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -713,7 +675,6 @@
       }
       requestAnimationFrame(animateParticles);
     }
-
     resizeCanvas();
     animateParticles();
     window.addEventListener("resize", resizeCanvas);
