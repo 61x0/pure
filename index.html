@@ -1,351 +1,1106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RROLL</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RROLL | Referral Hub</title>
+  <meta name="description" content="RROLL referral hub" />
+  <style>
+    :root {
+      --bg: #050505;
+      --bg2: #0a0a0a;
+      --panel: rgba(255,255,255,0.05);
+      --panel-2: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.12);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.62);
+      --muted-2: rgba(255,255,255,0.38);
+      --glow: rgba(255,255,255,0.14);
+      --shadow: 0 10px 30px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 820px;
+    }
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
-body{background:#0b0e11;color:#fff;overflow-x:hidden}
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* ---------- STARFIELD ---------- */
-#bg-stars{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ---------- TOP ---------- */
-.top-banner{
-  background:linear-gradient(90deg,#0f766e,#0284c7);
-  text-align:center;
-  padding:10px;
-  font-size:13px
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06), transparent 20%),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.04), transparent 24%),
+        radial-gradient(circle at 30% 85%, rgba(255,255,255,0.04), transparent 20%),
+        linear-gradient(180deg, #030303 0%, #070707 45%, #030303 100%);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  padding:18px 20px
-}
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.9;
+    }
 
-.logo{
-  font-weight:900;
-  font-size:22px;
-  letter-spacing:2px;
-  -webkit-text-stroke:1px rgba(0,200,180,.55);
-  text-shadow:0 0 14px rgba(0,200,180,.35);
-  text-decoration:none;
-  color:white
-}
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.055;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.14) 0.4px, transparent 0.7px),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.14) 0.4px, transparent 0.7px),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px),
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px);
+      background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px;
+      mix-blend-mode: screen;
+    }
 
-/* ---------- HERO ---------- */
-.hero{text-align:center;padding:30px 20px 40px}
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.08;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.04) 0px,
+        rgba(255,255,255,0.04) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+    }
 
-.hero-title{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-  font-size:44px;
-  font-weight:900;
-  letter-spacing:4px;
-  -webkit-text-stroke:1.4px rgba(0,200,180,.65);
-  text-shadow:
-    0 0 18px rgba(0,200,180,.35),
-    0 0 32px rgba(2,132,199,.25)
-}
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 22px 16px 80px;
+    }
 
-.dice{width:40px;height:40px}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 26px;
+      padding: 8px 2px 0;
+    }
 
-.subtitle{
-  margin-top:14px;
-  font-size:12px;
-  letter-spacing:2px;
-  color:#9fbec7
-}
+    .brand-mini {
+      position: relative;
+      font-weight: 800;
+      letter-spacing: 0.26em;
+      font-size: 0.95rem;
+      color: #fff;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.12);
+      animation: logoGlitch 5s infinite;
+    }
 
-/* ---------- SEARCH ---------- */
-.search-box{
-  max-width:520px;
-  margin:30px auto;
-  display:flex;
-  background:#11161b;
-  border-radius:16px;
-  overflow:hidden
-}
-.search-box input{
-  flex:1;
-  padding:16px;
-  background:transparent;
-  border:none;
-  color:white;
-  outline:none
-}
-.search-box button{
-  padding:0 22px;
-  background:linear-gradient(180deg,#0f766e,#0284c7);
-  border:none;
-  color:white;
-  font-weight:600;
-  cursor:pointer
-}
+    .brand-mini::before,
+    .brand-mini::after {
+      content: "RROLL";
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-/* ---------- CATEGORIES ---------- */
-.categories{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-  margin-bottom:40px
-}
-.chip{
-  padding:10px 16px;
-  border-radius:999px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  font-size:12px;
-  letter-spacing:1px;
-  cursor:pointer;
-  color:white;
-  font-family:inherit;
-  font-weight:inherit;
-}
-.chip.active{
-  background:linear-gradient(180deg,#0f766e,#0284c7);
-  border:none
-}
+    .brand-mini::before {
+      transform: translate(1px, 0);
+      color: rgba(255,255,255,0.28);
+      animation: ghost1 6s infinite;
+    }
 
-/* ---------- PRODUCTS ---------- */
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:20px;
-  padding:0 20px 60px;
-  max-width:1200px;
-  margin:auto
-}
+    .brand-mini::after {
+      transform: translate(-1px, 0);
+      color: rgba(255,255,255,0.18);
+      animation: ghost2 7s infinite;
+    }
 
-.card{
-  background:#11161b;
-  border-radius:16px;
-  padding:16px;
-  border:1px solid rgba(255,255,255,.08)
-}
+    .status-pill {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
 
-.logo-slot{
-  width:100%;
-  height:150px;
-  border-radius:14px;
-  background:#0c1116;
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:inset 0 0 24px rgba(0,0,0,.65);
-  margin-bottom:12px
-}
+    .hero {
+      position: relative;
+      padding: 28px 18px 22px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03)),
+        rgba(255,255,255,0.02);
+      border-radius: 26px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
 
-.product-title{font-size:15px;margin-bottom:6px}
-.card p{font-size:13px;color:#cbd5e1;margin-bottom:12px}
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.09), transparent 30%, transparent 70%, rgba(255,255,255,0.08));
+      pointer-events: none;
+      border-radius: inherit;
+    }
 
-.card button{
-  background:linear-gradient(180deg,#0f766e,#0284c7);
-  border:none;
-  border-radius:10px;
-  color:white;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 0 14px rgba(0,200,180,.35);
-}
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -60%;
+      left: -10%;
+      width: 60%;
+      height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: rotate(18deg);
+      animation: sheen 9s linear infinite;
+      pointer-events: none;
+    }
 
-/* ---------- MODAL ---------- */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:10
-}
-.modal.active{display:flex}
-.modal-box{
-  background:#0f1418;
-  width:92%;
-  max-width:520px;
-  border-radius:18px;
-  padding:22px;
-  border:1px solid rgba(255,255,255,.1)
-}
-.close{
-  text-align:right;
-  font-size:13px;
-  cursor:pointer;
-  color:#94a3b8
-}
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
 
-/* ---------- FOOTER ---------- */
-.footer{
-  margin:60px 20px 30px;
-  background:#11161b;
-  border-radius:16px;
-  padding:20px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,.08)
-}
-.footer-links{
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  justify-content:center;
-  margin-bottom:12px
-}
-.footer-links a{
-  color:#94a3b8;
-  font-size:12px;
-  text-decoration:none
-}
-.footer small{color:#94a3b8;font-size:11px}
-</style>
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.73rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 14px rgba(255,255,255,0.75);
+      animation: pulse 2.4s infinite;
+      flex: 0 0 auto;
+    }
+
+    .title-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(2.35rem, 8vw, 5.6rem);
+      line-height: 0.88;
+      letter-spacing: 0.22em;
+      font-weight: 900;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      text-shadow:
+        0 0 30px rgba(255,255,255,0.08),
+        0 0 70px rgba(255,255,255,0.04);
+      animation: titleGlitch 8s infinite;
+    }
+
+    .title .dice-o {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.98em;
+      height: 0.98em;
+      margin: 0 0.05em;
+      border: 2px solid rgba(255,255,255,0.9);
+      border-radius: 0.18em;
+      transform: rotate(10deg) translateY(0.04em);
+      position: relative;
+      vertical-align: middle;
+      box-shadow:
+        0 0 16px rgba(255,255,255,0.1),
+        inset 0 0 12px rgba(255,255,255,0.05);
+    }
+
+    .title .dice-o::before,
+    .title .dice-o::after {
+      content: "";
+      position: absolute;
+      width: 0.12em;
+      height: 0.12em;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        0.25em 0.25em 0 0 #fff,
+        -0.25em -0.25em 0 0 #fff;
+    }
+
+    .hero-right {
+      text-align: right;
+      min-width: 72px;
+    }
+
+    .count-box {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.045);
+      padding: 11px 12px;
+      border-radius: 16px;
+      min-width: 74px;
+      box-shadow: var(--shadow);
+    }
+
+    .count-box strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .count-box span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .subtext {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.96rem;
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .ghost-btn,
+    .solid-btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .ghost-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.045);
+      backdrop-filter: blur(8px);
+    }
+
+    .solid-btn {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 12px 30px rgba(255,255,255,0.08);
+    }
+
+    .ghost-btn:active,
+    .solid-btn:active {
+      transform: scale(0.98);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 18px 0 16px;
+    }
+
+    .search-box,
+    .filter-box {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .search-box {
+      padding: 12px 14px;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      font-size: 0.98rem;
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+
+    .filter-box {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-box::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-btn {
+      appearance: none;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,0.045);
+      color: #fff;
+      border-radius: 999px;
+      padding: 11px 14px;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s ease;
+      flex: 0 0 auto;
+    }
+
+    .filter-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 18px;
+      padding: 14px 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      min-width: 0;
+    }
+
+    .stat-card .kicker {
+      display: block;
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.18rem;
+      line-height: 1;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .section-head .count {
+      color: var(--muted-2);
+      font-size: 0.8rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.07), transparent 50%, rgba(255,255,255,0.03));
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.2);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .left-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .casino-name {
+      margin: 0;
+      font-size: 1.03rem;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+    }
+
+    .casino-sub {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+    }
+
+    .badge.done {
+      background: rgba(255,255,255,0.95);
+      color: #000;
+      box-shadow: 0 0 18px rgba(255,255,255,0.08);
+    }
+
+    .badge.missing {
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .visit-btn,
+    .copy-btn,
+    .placeholder-btn {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      min-height: 48px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+    }
+
+    .visit-btn,
+    .placeholder-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      padding: 0 14px;
+    }
+
+    .visit-btn {
+      background: #fff;
+      color: #000;
+    }
+
+    .copy-btn {
+      appearance: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      padding: 0 14px;
+      min-width: 88px;
+    }
+
+    .placeholder-btn {
+      background: rgba(255,255,255,0.035);
+      color: rgba(255,255,255,0.5);
+    }
+
+    .waitlist {
+      border: 1px dashed rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.025);
+      border-radius: 18px;
+      padding: 16px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: rgba(255,255,255,0.36);
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-bottom: 10px;
+    }
+
+    .empty-state {
+      display: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.92); }
+    }
+
+    @keyframes sheen {
+      0% { transform: translateX(-60%) rotate(18deg); }
+      100% { transform: translateX(220%) rotate(18deg); }
+    }
+
+    @keyframes ghost1 {
+      0%, 95%, 100% { opacity: 0; }
+      96% { opacity: 0.6; }
+      97% { opacity: 0; }
+      98% { opacity: 0.45; }
+    }
+
+    @keyframes ghost2 {
+      0%, 89%, 100% { opacity: 0; }
+      90% { opacity: 0.35; }
+      91% { opacity: 0; }
+      92% { opacity: 0.2; }
+    }
+
+    @keyframes logoGlitch {
+      0%, 91%, 100% { transform: translate(0, 0); }
+      92% { transform: translate(1px, -1px); }
+      93% { transform: translate(-1px, 1px); }
+      94% { transform: translate(0, 0); }
+    }
+
+    @keyframes titleGlitch {
+      0%, 96%, 100% { transform: translate(0,0); filter: none; }
+      96.5% { transform: translate(1px, -1px); }
+      97% { transform: translate(-1px, 1px); }
+      97.5% { transform: translate(1px, 0); }
+      98% { transform: translate(0,0); }
+    }
+
+    @media (min-width: 640px) {
+      .toolbar {
+        grid-template-columns: 1.2fr 1fr;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 639px) {
+      .hero-top {
+        flex-direction: column;
+      }
+
+      .hero-right {
+        width: 100%;
+        text-align: left;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .title {
+        letter-spacing: 0.16em;
+      }      
+      
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .copy-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .hero {
+        padding: 22px 14px 18px;
+      }
+
+      .title {
+        font-size: 2.45rem;
+        letter-spacing: 0.12em;
+      }
+
+      .stat-card {
+        padding: 12px 10px;
+      }
+
+      .stat-card strong {
+        font-size: 1.02rem;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<canvas id="bg-stars"></canvas>
+  <main class="wrap">
+    <div class="topbar">
+      <div class="brand-mini">RROLL</div>
+      <div class="status-pill" id="liveStatus">Referral Hub / Live</div>
+    </div>
 
-<div class="top-banner">All Our Links Here → Join</div>
+    <section class="hero">
+      <div class="hero-label"><span class="dot"></span> Organized referral tracker</div>
 
-<header class="header">
-  <a href="/" class="logo">RROLL</a>
-</header>
+      <div class="hero-top">
+        <div class="title-wrap">
+          <h1 class="title">RR<span class="dice-o"></span>LL</h1>
+          <p class="subtext">
+            Clean dark referral hub with search, sorting, copy buttons, completed vs missing tracking, and a full mobile layout that still looks hard.
+          </p>
+        </div>
 
-<main class="hero">
-  <div class="hero-title">
-    RR
-    <svg class="dice" viewBox="0 0 100 100">
-      <rect x="8" y="8" width="84" height="84" rx="18"
-        fill="white" stroke="rgba(0,200,180,.85)" stroke-width="6"/>
-      <circle cx="50" cy="50" r="7" fill="#0b0e11"/>
-      <circle cx="30" cy="30" r="7" fill="#0b0e11"/>
-      <circle cx="70" cy="70" r="7" fill="#0b0e11"/>
-    </svg>
-    LL
-  </div>
-
-  <p class="subtitle">FREE GAME • VERIFIED • 24/7</p>
-
-  <div class="search-box">
-    <input id="search" placeholder="Search product..." />
-    <button>Product</button>
-  </div>
-
-  <div class="categories" id="categories"></div>
-</main>
-
-<section class="products" id="products"></section>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="close" onclick="closeModal()">Close</div>
-    <h3 id="modalTitle"></h3>
-    <p id="modalDesc"></p>
-  </div>
-</div>
-
-<footer class="footer">
-  <div class="footer-links">
-    <a>TOS</a>
-    <a>REVIEWS</a>
-    <a>VOUCHES</a>
-    <a>BULK / DISCOUNTS</a>
-    <a>FAQS</a>
-  </div>
-  <small>© 2025 RROLL. All rights reserved.</small>
-</footer>
-
-<script>
-/* ---------- STARFIELD ---------- */
-const c=document.getElementById("bg-stars"),x=c.getContext("2d");
-let w,h,d=[];
-function resize(){
-  w=c.width=innerWidth;
-  h=c.height=innerHeight;
-  d=[...Array(Math.floor(w*h*0.000085))].map(()=>({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    s:Math.random()*20+10
-  }));
-}
-function anim(){
-  x.clearRect(0,0,w,h);
-  d.forEach(p=>{
-    p.y-=p.s*0.016;
-    if(p.y<0)p.y=h;
-    x.fillStyle="rgba(0,200,180,.35)";
-    x.beginPath();
-    x.arc(p.x,p.y,1.2,0,Math.PI*2);
-    x.fill();
-  });
-  requestAnimationFrame(anim);
-}
-resize();anim();onresize=resize;
-
-/* ---------- PRODUCTS ---------- */
-let products = [];
-const cats=["ALL",...new Set(products.map(p=>p.cat))];
-let active="ALL";
-
-fetch('http://localhost:3000/products')
-  .then(res => res.json())
-  .then(data => {
-    products = data;
-    renderCats();
-    renderProducts();
-  });
-
-const catEl=document.getElementById("categories");
-const prodEl=document.getElementById("products");
-const search=document.getElementById("search");
-
-function renderCats(){
-  catEl.innerHTML=cats.map(c=>`<button class="chip ${c===active?"active":""}" data-c="${c}">${c}</button>`).join("");
-}
-function renderProducts(){
-  prodEl.innerHTML=products
-    .filter(p=>(active==="ALL"||p.cat===active)&&p.name.toLowerCase().includes(search.value.toLowerCase()))
-    .map(p=>`
-      <div class="card">
-        <div class="logo-slot"></div>
-        <div class="product-title">${p.name}</div>
-        <p>Instant delivery • Verified</p>
-        <button data-product-name='${p.name}'>Purchase | $3.00</button>
+        <div class="hero-right">
+          <div class="count-box">
+            <strong id="heroDoneCount">0</strong>
+            <span>Done</span>
+          </div>
+        </div>
       </div>
-    `).join("");
-}
 
-catEl.onclick=e=>{
-  if(e.target.dataset.c){
-    active=e.target.dataset.c;
-    renderCats();renderProducts();
-  }
-};
+      <div class="hero-actions">
+        <a href="#completedSection" class="solid-btn">Completed Links</a>
+        <a href="#missingSection" class="ghost-btn">Missing Links</a>
+        <button class="ghost-btn" id="copyCompletedBtn" type="button">Copy Completed</button>
+      </div>
+    </section>
 
-prodEl.onclick=e=>{
-  if(e.target.dataset.productName){
-    openModal(e.target.dataset.productName);
-  }
-};
-search.oninput=renderProducts;
+    <section class="toolbar">
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Search casino name..." autocomplete="off" />
+      </div>
 
-function openModal(name){
-  modal.classList.add("active");
-  modalTitle.textContent=name;
-  modalDesc.textContent="Purchase instructions will appear here.";
-}
-function closeModal(){modal.classList.remove("active")}
+      <div class="filter-box" id="filterBox">
+        <button class="filter-btn active" data-filter="all" type="button">All</button>
+        <button class="filter-btn" data-filter="done" type="button">Done</button>
+        <button class="filter-btn" data-filter="missing" type="button">Missing</button>
+      </div>
+    </section>
 
-renderCats();renderProducts();
-</script>
+    <section class="stats">
+      <div class="stat-card">
+        <span class="kicker">Total</span>
+        <strong id="totalCount">0</strong>
+      </div>
+      <div class="stat-card">
+        <span class="kicker">Completed</span>
+        <strong id="doneCount">0</strong>
+      </div>
+      <div class="stat-card">
+        <span class="kicker">Missing</span>
+        <strong id="missingCount">0</strong>
+      </div>
+    </section>
 
+    <section class="section" id="completedSection">
+      <div class="section-head">
+        <h2>Completed</h2>
+        <div class="count" id="completedVisibleCount">0 visible</div>
+      </div>
+      <div class="grid" id="completedGrid"></div>
+    </section>
+
+    <section class="section" id="missingSection">
+      <div class="section-head">
+        <h2>Missing</h2>
+        <div class="count" id="missingVisibleCount">0 visible</div>
+      </div>
+      <div class="grid" id="missingGrid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Waitlist</h2>
+        <div class="count">1 item</div>
+      </div>
+      <div class="waitlist">lucky party waitlist</div>
+    </section>
+
+    <div class="empty-state" id="emptyState">
+      Nothing matched your search.
+    </div>
+
+    <footer class="footer">
+      RROLL Referral Hub
+    </footer>
+  </main>
+
+  <script>
+    const casinos = [
+      { name: "wowvegas", status: "done", url: "https://www.wowvegas.com/?raf=9598726", note: "link added" },
+      { name: "luckyrush", status: "done", url: "https://luckyrush.io/register?referral=4otve", note: "link added" },
+      { name: "stake.com + stake.us", status: "done", url: "https://luckystake.com/?c=68436_4T8HC6LV", note: "link added" },
+      { name: "hello millions", status: "done", url: "https://www.hellomillions.com/lp/raf?r=3b34d4f6%2F1929775114", note: "link added" },
+      { name: "playfame", status: "done", url: "https://www.playfame.com/lp/raf?r=1552d664%2F1949330342", note: "link added" },
+      { name: "spin blitz", status: "done", url: "https://www.spinblitz.com/lp/raf?r=f636edd6%2F1930546521", note: "link added" },
+      { name: "mcluck", status: "done", url: "https://mcluck.onelink.me/IsO8", note: "code: 1944571458" },
+      { name: "real prize", status: "done", url: "https://realprize.com/refer/1430325", note: "link added" },
+      { name: "spree", status: "done", url: "https://spree.com/?r=1540676", note: "link added" },
+      { name: "legends", status: "done", url: "https://www.legendz.com/?referred_by_id=464211", note: "link added" },
+      { name: "superslots", status: "done", url: "https://www.superslots.ag?RAF=879FE84D", note: "link added" },
+      { name: "shuffle", status: "done", url: "https://shuffle.us?r=6luSRTfGFM", note: "link added" },
+      { name: "ace", status: "done", url: "https://www.ace.com/?r=4b993878%2F25140294", note: "link added" },
+      { name: "luckyhands", status: "done", url: "https://luckyhands.com/sign-up?code=bc9f512f-392d-45a3-934d-eeee284f1f10", note: "link added" },
+      { name: "taosweeps", status: "done", url: "https://taosweeps.com/register?referral=vjq0k", note: "link added" },
+      { name: "havanafortuna", status: "done", url: "https://havanafortuna.com/en/sign-up?promo=1owetroop", note: "link added" },
+
+      { name: "crown coins casino", status: "missing" },
+      { name: "roobet", status: "missing" },
+      { name: "rainbet", status: "missing" },
+      { name: "metawin", status: "missing" },
+      { name: "zula", status: "missing" },
+      { name: "sportszino", status: "missing" },
+      { name: "pulsz + pbingo", status: "missing" },
+      { name: "lonestar", status: "missing" },
+      { name: "spinpals", status: "missing" },
+      { name: "modo", status: "missing" },
+      { name: "chumba", status: "missing" },
+      { name: "slotslv", status: "missing" },
+      { name: "bovada", status: "missing" },
+      { name: "ignition", status: "missing" },
+      { name: "wild.io", status: "missing" },
+      { name: "rebet", status: "missing" },
+      { name: "wild casino", status: "missing" },
+      { name: "sidepot", status: "missing" },
+      { name: "luckybird", status: "missing" },
+      { name: "jackpota", status: "missing" },
+      { name: "moozi", status: "missing" },
+      { name: "luckyland casino + luckylandslots", status: "missing" },
+      { name: "my prize us", status: "missing" },
+      { name: "yay!", status: "missing" },
+      { name: "american luck", status: "missing" },
+      { name: "fortunecoins", status: "missing" },
+      { name: "spinquest", status: "missing" },
+      { name: "high5", status: "missing" },
+      { name: "stackr", status: "missing" },
+      { name: "megabonanza", status: "missing" },
+      { name: "rollingriches", status: "missing" },
+      { name: "betr", status: "missing" },
+      { name: "gains", status: "missing" },
+      { name: "clubspoker / clubs casino", status: "missing" },
+      { name: "global poker", status: "missing" },
+      { name: "sweep next", status: "missing" },
+      { name: "chipnwin", status: "missing" },
+      { name: "zoot", status: "missing" },
+      { name: "sixty6", status: "missing" },
+      { name: "smiles", status: "missing" },
+      { name: "dara", status: "missing" },
+      { name: "punt", status: "missing" },
+      { name: "scrooge", status: "missing" }
+    ];
+
+    const completedGrid = document.getElementById("completedGrid");
+    const missingGrid = document.getElementById("missingGrid");
+    const totalCount = document.getElementById("totalCount");
+    const doneCount = document.getElementById("doneCount");
+    const missingCount = document.getElementById("missingCount");
+    const heroDoneCount = document.getElementById("heroDoneCount");
+    const completedVisibleCount = document.getElementById("completedVisibleCount");
+    const missingVisibleCount = document.getElementById("missingVisibleCount");
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const emptyState = document.getElementById("emptyState");
+    const copyCompletedBtn = document.getElementById("copyCompletedBtn");
+
+    let activeFilter = "all";
+    let searchTerm = "";
+
+    function formatName(name) {
+      return name
+        .split(" ")
+        .map(word => word.length <= 3 && !word.includes(".") ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+
+    function makeCard(item) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.dataset.status = item.status;
+      card.dataset.name = item.name.toLowerCase();
+
+      const badgeClass = item.status === "done" ? "badge done" : "badge missing";
+      const badgeText = item.status === "done" ? "Completed" : "Missing";
+      const subText = item.status === "done"
+        ? (item.note || "referral link saved")
+        : "still need to grab link";
+
+      const actionHtml = item.status === "done"
+        ? `
+          <a class="visit-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">Open Link</a>
+          <button class="copy-btn" type="button" data-copy="${item.url.replace(/"/g, "&quot;")}">Copy</button>
+        `
+        : `
+          <div class="placeholder-btn">No Link Yet</div>
+          <button class="copy-btn" type="button" data-copy="${item.name.replace(/"/g, "&quot;")}">Copy Name</button>
+        `;
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="left-meta">
+            <h3 class="casino-name">${formatName(item.name)}</h3>
+            <div class="casino-sub">${subText}</div>
+          </div>
+          <div class="${badgeClass}">${badgeText}</div>
+        </div>
+        <div class="actions">
+          ${actionHtml}
+        </div>
+      `;
+
+      return card;
+    }
+
+    function getFilteredData() {
+      return casinos.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
+        const matchesFilter = activeFilter === "all" ? true : item.status === activeFilter;
+        return matchesSearch && matchesFilter;
+      });
+    }
+
+    function render() {
+      completedGrid.innerHTML = "";
+      missingGrid.innerHTML = "";
+
+      const filtered = getFilteredData();
+      const completed = filtered.filter(item => item.status === "done");
+      const missing = filtered.filter(item => item.status === "missing");
+
+      completed.forEach(item => completedGrid.appendChild(makeCard(item)));
+      missing.forEach(item => missingGrid.appendChild(makeCard(item)));
+
+      const total = casinos.length;
+      const done = casinos.filter(item => item.status === "done").length;
+      const missingTotal = casinos.filter(item => item.status === "missing").length;
+
+      totalCount.textContent = total;
+      doneCount.textContent = done;
+      missingCount.textContent = missingTotal;
+      heroDoneCount.textContent = done;
+
+      completedVisibleCount.textContent = `${completed.length} visible`;
+      missingVisibleCount.textContent = `${missing.length} visible`;
+
+      const noResults = filtered.length === 0;
+      emptyState.style.display = noResults ? "block" : "none";
+      document.getElementById("completedSection").classList.toggle("hidden", completed.length === 0);
+      document.getElementById("missingSection").classList.toggle("hidden", missing.length === 0);
+
+      bindCopyButtons();
+    }
+
+    async function copyText(value, button) {
+      try {
+        await navigator.clipboard.writeText(value);
+        const oldText = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => {
+          button.textContent = oldText;
+        }, 1200);
+      } catch (err) {
+        const temp = document.createElement("textarea");
+        temp.value = value;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+        const oldText = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => {
+          button.textContent = oldText;
+        }, 1200);
+      }
+    }
+
+    function bindCopyButtons() {
+      document.querySelectorAll(".copy-btn").forEach(button => {
+        button.onclick = () => copyText(button.dataset.copy, button);
+      });
+    }
+
+    searchInput.addEventListener("input", e => {
+      searchTerm = e.target.value;
+      render();
+    });
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        render();
+      });
+    });
+
+    copyCompletedBtn.addEventListener("click", async () => {
+      const completedLinks = casinos
+        .filter(item => item.status === "done")
+        .map(item => `${formatName(item.name)} - ${item.url}${item.note ? ` (${item.note})` : ""}`)
+        .join("\n");
+
+      copyText(completedLinks, copyCompletedBtn);
+    });
+
+    render();
+
+    const canvas = document.getElementById("particle-canvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let particleCount = 70;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+      canvas.height = window.innerHeight * Math.min(window.devicePixelRatio || 1, 2);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(Math.min(window.devicePixelRatio || 1, 2), Math.min(window.devicePixelRatio || 1, 2));
+      buildParticles();
+    }
+
+    function buildParticles() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      particleCount = Math.max(34, Math.min(90, Math.floor(w / 18)));
+      particles = Array.from({ length: particleCount }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.8 + 0.4,
+        speed: Math.random() * 0.45 + 0.12,
+        alpha: Math.random() * 0.65 + 0.15
+      }));
+    }
+
+    function animateParticles() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      for (const p of particles) {
+        p.y -= p.speed;
+        if (p.y < -8) {
+          p.y = h + 8;
+          p.x = Math.random() * w;
+        }
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    animateParticles();
+    window.addEventListener("resize", resizeCanvas);
+  </script>
 </body>
 </html>
