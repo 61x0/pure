@@ -13,736 +13,198 @@
       --muted: rgba(255,255,255,0.62);
       --muted-2: rgba(255,255,255,0.38);
       --shadow: 0 10px 30px rgba(0,0,0,0.45);
-      --max: 820px;
+      --max: 980px;
     }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      min-height: 100vh;
+      margin: 0; min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       background:
         radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06), transparent 20%),
         radial-gradient(circle at 82% 18%, rgba(255,255,255,0.04), transparent 24%),
         radial-gradient(circle at 30% 85%, rgba(255,255,255,0.04), transparent 20%),
         linear-gradient(180deg, #030303 0%, #070707 45%, #030303 100%);
-      color: var(--text);
-      overflow-x: hidden;
-      position: relative;
+      color: var(--text); overflow-x: hidden; position: relative;
     }
-
-    #particle-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.9;
-    }
-
+    #particle-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.9; }
     .noise {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.055;
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.055;
       background-image:
         radial-gradient(circle at 20% 30%, rgba(255,255,255,0.14) 0.4px, transparent 0.7px),
         radial-gradient(circle at 80% 60%, rgba(255,255,255,0.14) 0.4px, transparent 0.7px),
         radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px),
         radial-gradient(circle at 70% 20%, rgba(255,255,255,0.1) 0.4px, transparent 0.7px);
-      background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px;
-      mix-blend-mode: screen;
+      background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px; mix-blend-mode: screen;
     }
-
     .scanlines {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.08;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.04) 0px,
-        rgba(255,255,255,0.04) 1px,
-        transparent 2px,
-        transparent 4px
-      );
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.08;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 2px, transparent 4px);
     }
-
-    .wrap {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 22px 16px 80px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 26px;
-      padding: 8px 2px 0;
-    }
-
+    .wrap { position: relative; z-index: 2; width: 100%; max-width: var(--max); margin: 0 auto; padding: 22px 16px 80px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 26px; padding: 8px 2px 0; }
     .brand-mini {
-      position: relative;
-      font-weight: 800;
-      letter-spacing: 0.26em;
-      font-size: 0.95rem;
-      color: #fff;
-      text-transform: uppercase;
-      text-shadow: 0 0 18px rgba(255,255,255,0.12);
-      animation: logoGlitch 5s infinite;
+      position: relative; font-weight: 800; letter-spacing: 0.26em; font-size: 0.95rem; color: #fff; text-transform: uppercase;
+      text-shadow: 0 0 18px rgba(255,255,255,0.12); animation: logoGlitch 5s infinite;
     }
-
-    .brand-mini::before,
-    .brand-mini::after {
-      content: "RROLL";
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .brand-mini::before {
-      transform: translate(1px, 0);
-      color: rgba(255,255,255,0.28);
-      animation: ghost1 6s infinite;
-    }
-
-    .brand-mini::after {
-      transform: translate(-1px, 0);
-      color: rgba(255,255,255,0.18);
-      animation: ghost2 7s infinite;
-    }
-
+    .brand-mini::before, .brand-mini::after { content: "RROLL"; position: absolute; left: 0; top: 0; opacity: 0; pointer-events: none; }
+    .brand-mini::before { transform: translate(1px, 0); color: rgba(255,255,255,0.28); animation: ghost1 6s infinite; }
+    .brand-mini::after { transform: translate(-1px, 0); color: rgba(255,255,255,0.18); animation: ghost2 7s infinite; }
     .status-pill {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      padding: 9px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      white-space: nowrap;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--muted); padding: 9px 12px; border-radius: 999px;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; backdrop-filter: blur(10px); box-shadow: var(--shadow); white-space: nowrap;
     }
-
     .hero {
-      position: relative;
-      padding: 28px 18px 22px;
-      border: 1px solid var(--border);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03)),
-        rgba(255,255,255,0.02);
-      border-radius: 26px;
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      margin-bottom: 18px;
+      position: relative; padding: 28px 18px 22px; border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03)), rgba(255,255,255,0.02);
+      border-radius: 26px; backdrop-filter: blur(14px); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 18px;
     }
-
     .hero::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
+      content: ""; position: absolute; inset: -1px;
       background: linear-gradient(135deg, rgba(255,255,255,0.09), transparent 30%, transparent 70%, rgba(255,255,255,0.08));
-      pointer-events: none;
-      border-radius: inherit;
+      pointer-events: none; border-radius: inherit;
     }
-
     .hero::after {
-      content: "";
-      position: absolute;
-      top: -60%;
-      left: -10%;
-      width: 60%;
-      height: 220%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-      transform: rotate(18deg);
-      animation: sheen 9s linear infinite;
-      pointer-events: none;
+      content: ""; position: absolute; top: -60%; left: -10%; width: 60%; height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: rotate(18deg);
+      animation: sheen 9s linear infinite; pointer-events: none;
     }
-
-    .hero-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.73rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      margin-bottom: 14px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 14px rgba(255,255,255,0.75);
-      animation: pulse 2.4s infinite;
-      flex: 0 0 auto;
-    }
-
-    .hero-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .title-wrap {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .title {
-      margin: 0;
-      font-size: clamp(2.35rem, 8vw, 5.6rem);
-      line-height: 0.88;
-      letter-spacing: 0.22em;
-      font-weight: 900;
-      text-transform: uppercase;
-      display: inline-block;
-      text-shadow: 0 0 30px rgba(255,255,255,0.08), 0 0 70px rgba(255,255,255,0.04);
-      animation: titleGlitch 8s infinite;
-    }
-
+    .hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.73rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 14px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 14px rgba(255,255,255,0.75); animation: pulse 2.4s infinite; flex: 0 0 auto; }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .title-wrap { flex: 1; min-width: 0; }
+    .title { margin: 0; font-size: clamp(2.35rem, 8vw, 5.6rem); line-height: 0.88; letter-spacing: 0.22em; font-weight: 900; text-transform: uppercase; display: inline-block; text-shadow: 0 0 30px rgba(255,255,255,0.08), 0 0 70px rgba(255,255,255,0.04); animation: titleGlitch 8s infinite; }
     .title .dice-o {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 0.98em;
-      height: 0.98em;
-      margin: 0 0.05em;
-      border: 2px solid rgba(255,255,255,0.9);
-      border-radius: 0.18em;
-      transform: rotate(10deg) translateY(0.04em);
-      position: relative;
-      vertical-align: middle;
-      box-shadow: 0 0 16px rgba(255,255,255,0.1), inset 0 0 12px rgba(255,255,255,0.05);
+      display: inline-flex; align-items: center; justify-content: center; width: 0.98em; height: 0.98em; margin: 0 0.05em;
+      border: 2px solid rgba(255,255,255,0.9); border-radius: 0.18em; transform: rotate(10deg) translateY(0.04em);
+      position: relative; vertical-align: middle; box-shadow: 0 0 16px rgba(255,255,255,0.1), inset 0 0 12px rgba(255,255,255,0.05);
     }
-
-    .title .dice-o::before,
-    .title .dice-o::after {
-      content: "";
-      position: absolute;
-      width: 0.12em;
-      height: 0.12em;
-      background: #fff;
-      border-radius: 50%;
+    .title .dice-o::before, .title .dice-o::after {
+      content: ""; position: absolute; width: 0.12em; height: 0.12em; background: #fff; border-radius: 50%;
       box-shadow: 0.25em 0.25em 0 0 #fff, -0.25em -0.25em 0 0 #fff;
     }
-
-    .subtext {
-      margin: 12px 0 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 0.96rem;
-      max-width: 620px;
+    .subtext { margin: 12px 0 0; color: var(--muted); line-height: 1.55; font-size: 0.96rem; max-width: 700px; }
+    .hero-right { min-width: 74px; text-align: right; }
+    .count-box { border: 1px solid var(--border); background: rgba(255,255,255,0.045); padding: 11px 12px; border-radius: 16px; box-shadow: var(--shadow); }
+    .count-box strong { display: block; font-size: 1.05rem; line-height: 1; }
+    .count-box span { display: block; margin-top: 6px; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .ghost-btn, .solid-btn {
+      appearance: none; border: none; cursor: pointer; text-decoration: none; color: #fff; font-weight: 700;
+      border-radius: 14px; padding: 12px 14px; font-size: 0.9rem; transition: transform 0.2s ease, background 0.2s ease;
     }
-
-    .hero-right {
-      min-width: 74px;
-      text-align: right;
+    .ghost-btn { border: 1px solid var(--border); background: rgba(255,255,255,0.045); backdrop-filter: blur(8px); }
+    .solid-btn { background: #fff; color: #000; box-shadow: 0 12px 30px rgba(255,255,255,0.08); }
+    .toolbar { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 18px 0 16px; }
+    .search-box, .filter-box {
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04); border-radius: 16px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
     }
-
-    .count-box {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.045);
-      padding: 11px 12px;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .count-box strong {
-      display: block;
-      font-size: 1.05rem;
-      line-height: 1;
-    }
-
-    .count-box span {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .ghost-btn,
-    .solid-btn {
-      appearance: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 700;
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-size: 0.9rem;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .ghost-btn {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.045);
-      backdrop-filter: blur(8px);
-    }
-
-    .solid-btn {
-      background: #fff;
-      color: #000;
-      box-shadow: 0 12px 30px rgba(255,255,255,0.08);
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin: 18px 0 16px;
-    }
-
-    .search-box,
-    .filter-box {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-
-    .search-box {
-      padding: 12px 14px;
-    }
-
+    .search-box { padding: 12px 14px; }
     .search-box input {
-      width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: #fff;
-      font-size: 0.98rem;
+      width: 100%; border: none; outline: none; background: transparent; color: #fff; font-size: 0.98rem;
     }
-
-    .search-box input::placeholder,
-    .link-input::placeholder {
-      color: rgba(255,255,255,0.35);
-    }
-
-    .filter-box {
-      display: flex;
-      gap: 8px;
-      padding: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .filter-box::-webkit-scrollbar {
-      display: none;
-    }
-
+    .search-box input::placeholder, .link-input::placeholder { color: rgba(255,255,255,0.35); }
+    .filter-box { display: flex; gap: 8px; padding: 8px; overflow-x: auto; scrollbar-width: none; }
+    .filter-box::-webkit-scrollbar { display: none; }
     .filter-btn {
-      appearance: none;
-      border: 1px solid transparent;
-      background: rgba(255,255,255,0.045);
-      color: #fff;
-      border-radius: 999px;
-      padding: 11px 14px;
-      font-size: 0.82rem;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: 0.2s ease;
-      flex: 0 0 auto;
+      appearance: none; border: 1px solid transparent; background: rgba(255,255,255,0.045); color: #fff; border-radius: 999px;
+      padding: 11px 14px; font-size: 0.82rem; white-space: nowrap; cursor: pointer; transition: 0.2s ease; flex: 0 0 auto;
     }
-
-    .filter-btn.active {
-      background: #fff;
-      color: #000;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
+    .filter-btn.active { background: #fff; color: #000; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
     .stat-card {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.035);
-      border-radius: 18px;
-      padding: 14px 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      min-width: 0;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.035); border-radius: 18px; padding: 14px 12px;
+      box-shadow: var(--shadow); backdrop-filter: blur(10px); min-width: 0;
     }
-
-    .stat-card .kicker {
-      display: block;
-      font-size: 0.66rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .stat-card strong {
-      display: block;
-      font-size: 1.18rem;
-      line-height: 1;
-    }
-
-    .section {
-      margin-top: 20px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: 0.86rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .section-head .count {
-      color: var(--muted-2);
-      font-size: 0.8rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
+    .stat-card .kicker { display: block; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stat-card strong { display: block; font-size: 1.18rem; line-height: 1; }
+    .section { margin-top: 20px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .section-head h2 { margin: 0; font-size: 0.86rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .section-head .count { color: var(--muted-2); font-size: 0.8rem; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
     .card {
-      position: relative;
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
+      position: relative; border: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
+      border-radius: 18px; padding: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px); overflow: hidden;
       transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
     }
-
     .card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.07), transparent 50%, rgba(255,255,255,0.03));
-      opacity: 0.45;
-      pointer-events: none;
+      content: ""; position: absolute; inset: -1px; background: linear-gradient(135deg, rgba(255,255,255,0.07), transparent 50%, rgba(255,255,255,0.03));
+      opacity: 0.45; pointer-events: none;
     }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.2);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    .card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .left-meta { min-width: 0; flex: 1; }
+    .casino-row { display: flex; align-items: center; gap: 12px; }
+    .casino-logo {
+      width: 34px; height: 34px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.04);
+      object-fit: cover; flex: 0 0 auto;
     }
-
-    .card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+    .casino-name { margin: 0; font-size: 1.03rem; line-height: 1.2; font-weight: 800; letter-spacing: 0.02em; word-break: break-word; }
+    .casino-sub { margin-top: 5px; color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .mini-tag {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.035); color: rgba(255,255,255,0.74);
+      border-radius: 999px; padding: 7px 10px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
     }
-
-    .left-meta {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .casino-name {
-      margin: 0;
-      font-size: 1.03rem;
-      line-height: 1.2;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      word-break: break-word;
-    }
-
-    .casino-sub {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.35;
-    }
-
     .badge {
-      flex: 0 0 auto;
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
+      flex: 0 0 auto; border-radius: 999px; padding: 8px 10px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--border);
     }
-
-    .badge.done {
-      background: rgba(255,255,255,0.95);
-      color: #000;
-      box-shadow: 0 0 18px rgba(255,255,255,0.08);
+    .badge.done { background: rgba(255,255,255,0.95); color: #000; box-shadow: 0 0 18px rgba(255,255,255,0.08); }
+    .badge.missing, .badge.editing { background: rgba(255,255,255,0.04); color: #fff; }
+    .actions, .editor-actions {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: stretch;
     }
-
-    .badge.missing,
-    .badge.editing {
-      background: rgba(255,255,255,0.04);
-      color: #fff;
+    .visit-btn, .copy-btn, .placeholder-btn, .editor-btn, .cancel-btn {
+      border: 1px solid var(--border); border-radius: 14px; min-height: 48px; font-weight: 700; font-size: 0.9rem; transition: 0.2s ease;
     }
-
-    .actions,
-    .link-editor {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: stretch;
+    .visit-btn, .placeholder-btn, .editor-btn, .cancel-btn {
+      display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 0 14px; cursor: pointer;
     }
-
-    .visit-btn,
-    .copy-btn,
-    .placeholder-btn,
-    .editor-btn,
-    .cancel-btn {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      min-height: 48px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      transition: 0.2s ease;
+    .visit-btn, .editor-btn.primary { background: #fff; color: #000; }
+    .copy-btn, .cancel-btn, .editor-btn.secondary, .placeholder-btn {
+      appearance: none; background: rgba(255,255,255,0.04); color: #fff; padding: 0 14px; cursor: pointer;
     }
-
-    .visit-btn,
-    .placeholder-btn,
-    .editor-btn,
-    .cancel-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      padding: 0 14px;
-      cursor: pointer;
+    .editor-btn.disabled {
+      background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.42); cursor: not-allowed;
     }
-
-    .visit-btn,
-    .editor-btn.primary {
-      background: #fff;
-      color: #000;
-    }
-
-    .copy-btn,
-    .cancel-btn,
-    .editor-btn.secondary,
-    .placeholder-btn {
-      appearance: none;
-      background: rgba(255,255,255,0.04);
-      color: #fff;
-      padding: 0 14px;
-      min-width: 88px;
-      cursor: pointer;
-    }
-
-    .link-input-wrap {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
+    .link-input-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
     .link-input {
-      width: 100%;
-      min-height: 48px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: #fff;
-      outline: none;
-      padding: 0 14px;
-      font-size: 0.92rem;
-      box-shadow: var(--shadow);
+      width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+      color: #fff; outline: none; padding: 0 14px; font-size: 0.92rem; box-shadow: var(--shadow);
     }
-
-    .editor-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .waitlist {
-      border: 1px dashed rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.025);
-      border-radius: 18px;
-      padding: 16px;
-      color: var(--muted);
-      box-shadow: var(--shadow);
-    }
-
-    .footer {
-      margin-top: 26px;
-      color: rgba(255,255,255,0.36);
-      text-align: center;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding-bottom: 10px;
-    }
-
-    .empty-state {
-      display: none;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      border-radius: 18px;
-      padding: 18px;
-      color: var(--muted);
-      text-align: center;
-      box-shadow: var(--shadow);
-      margin-top: 12px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.55; transform: scale(0.92); }
-    }
-
-    @keyframes sheen {
-      0% { transform: translateX(-60%) rotate(18deg); }
-      100% { transform: translateX(220%) rotate(18deg); }
-    }
-
-    @keyframes ghost1 {
-      0%, 95%, 100% { opacity: 0; }
-      96% { opacity: 0.6; }
-      97% { opacity: 0; }
-      98% { opacity: 0.45; }
-    }
-
-    @keyframes ghost2 {
-      0%, 89%, 100% { opacity: 0; }
-      90% { opacity: 0.35; }
-      91% { opacity: 0; }
-      92% { opacity: 0.2; }
-    }
-
-    @keyframes logoGlitch {
-      0%, 91%, 100% { transform: translate(0, 0); }
-      92% { transform: translate(1px, -1px); }
-      93% { transform: translate(-1px, 1px); }
-      94% { transform: translate(0, 0); }
-    }
-
-    @keyframes titleGlitch {
-      0%, 96%, 100% { transform: translate(0,0); filter: none; }
-      96.5% { transform: translate(1px, -1px); }
-      97% { transform: translate(-1px, 1px); }
-      97.5% { transform: translate(1px, 0); }
-      98% { transform: translate(0,0); }
-    }
-
+    .waitlist { border: 1px dashed rgba(255,255,255,0.16); background: rgba(255,255,255,0.025); border-radius: 18px; padding: 16px; color: var(--muted); box-shadow: var(--shadow); }
+    .footer { margin-top: 26px; color: rgba(255,255,255,0.36); text-align: center; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; padding-bottom: 10px; }
+    .empty-state { display: none; border: 1px solid var(--border); background: rgba(255,255,255,0.03); border-radius: 18px; padding: 18px; color: var(--muted); text-align: center; box-shadow: var(--shadow); margin-top: 12px; }
+    .hidden { display: none !important; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.92); } }
+    @keyframes sheen { 0% { transform: translateX(-60%) rotate(18deg); } 100% { transform: translateX(220%) rotate(18deg); } }
+    @keyframes ghost1 { 0%, 95%, 100% { opacity: 0; } 96% { opacity: 0.6; } 97% { opacity: 0; } 98% { opacity: 0.45; } }
+    @keyframes ghost2 { 0%, 89%, 100% { opacity: 0; } 90% { opacity: 0.35; } 91% { opacity: 0; } 92% { opacity: 0.2; } }
+    @keyframes logoGlitch { 0%, 91%, 100% { transform: translate(0, 0); } 92% { transform: translate(1px, -1px); } 93% { transform: translate(-1px, 1px); } 94% { transform: translate(0, 0); } }
+    @keyframes titleGlitch { 0%, 96%, 100% { transform: translate(0,0); filter: none; } 96.5% { transform: translate(1px, -1px); } 97% { transform: translate(-1px, 1px); } 97.5% { transform: translate(1px, 0); } 98% { transform: translate(0,0); } }
     @media (min-width: 640px) {
-      .toolbar {
-        grid-template-columns: 1.2fr 1fr;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .toolbar { grid-template-columns: 1.2fr 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
+    @media (max-width: 820px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 639px) {
-      .hero-top {
-        flex-direction: column;
-      }
-
-      .hero-right {
-        width: 100%;
-        text-align: left;
-      }
-
-      .stats {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-
-      .title {
-        letter-spacing: 0.16em;
-      }
-
-      .actions,
-      .link-editor,
-      .editor-actions {
-        grid-template-columns: 1fr;
-      }
-
-      .copy-btn,
-      .cancel-btn,
-      .editor-btn {
-        width: 100%;
-      }
+      .hero-top { flex-direction: column; }
+      .hero-right { width: 100%; text-align: left; }
+      .title { letter-spacing: 0.16em; }
+      .actions, .editor-actions { grid-template-columns: 1fr; }
+      .copy-btn, .cancel-btn, .editor-btn, .visit-btn { width: 100%; }
     }
-
     @media (max-width: 420px) {
-      .wrap {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
-      .hero {
-        padding: 22px 14px 18px;
-      }
-
-      .title {
-        font-size: 2.45rem;
-        letter-spacing: 0.12em;
-      }
-
-      .stat-card {
-        padding: 12px 10px;
-      }
-
-      .stat-card strong {
-        font-size: 1.02rem;
-      }
+      .wrap { padding-left: 12px; padding-right: 12px; }
+      .hero { padding: 22px 14px 18px; }
+      .title { font-size: 2.45rem; letter-spacing: 0.12em; }
+      .stat-card { padding: 12px 10px; }
+      .stat-card strong { font-size: 1.02rem; }
     }
   </style>
 </head>
@@ -762,7 +224,7 @@
       <div class="hero-top">
         <div class="title-wrap">
           <h1 class="title">RR<span class="dice-o"></span>LL</h1>
-          <p class="subtext">Clean dark referral hub with search, tracking, copy buttons, and on-phone link saving for the casinos you haven’t filled in yet.</p>
+          <p class="subtext">Clean dark referral hub with logos, categories, search, edit-link flow, and on-phone saving so you can stop losing track of which casino links you already have.</p>
         </div>
         <div class="hero-right">
           <div class="count-box">
@@ -784,6 +246,9 @@
       </div>
       <div class="filter-box">
         <button class="filter-btn active" data-filter="all" type="button">All</button>
+        <button class="filter-btn" data-filter="sweepstakes" type="button">Sweepstakes</button>
+        <button class="filter-btn" data-filter="crypto" type="button">Crypto</button>
+        <button class="filter-btn" data-filter="other" type="button">Other</button>
         <button class="filter-btn" data-filter="done" type="button">Done</button>
         <button class="filter-btn" data-filter="missing" type="button">Missing</button>
       </div>
@@ -793,6 +258,7 @@
       <div class="stat-card"><span class="kicker">Total</span><strong id="totalCount">0</strong></div>
       <div class="stat-card"><span class="kicker">Completed</span><strong id="doneCount">0</strong></div>
       <div class="stat-card"><span class="kicker">Missing</span><strong id="missingCount">0</strong></div>
+      <div class="stat-card"><span class="kicker">Category</span><strong id="activeCategoryCount">All</strong></div>
     </section>
 
     <section class="section" id="completedSection">
@@ -825,69 +291,77 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "rroll-referral-links-v2";
+    const STORAGE_KEY = "rroll-referral-links-v3";
 
     const baseCasinos = [
-      { name: "wowvegas", status: "done", url: "https://www.wowvegas.com/?raf=9598726", note: "link added" },
-      { name: "luckyrush", status: "done", url: "https://luckyrush.io/register?referral=4otve", note: "link added" },
-      { name: "stake.com + stake.us", status: "done", url: "https://luckystake.com/?c=68436_4T8HC6LV", note: "link added" },
-      { name: "hello millions", status: "done", url: "https://www.hellomillions.com/lp/raf?r=3b34d4f6%2F1929775114", note: "link added" },
-      { name: "playfame", status: "done", url: "https://www.playfame.com/lp/raf?r=1552d664%2F1949330342", note: "link added" },
-      { name: "spin blitz", status: "done", url: "https://www.spinblitz.com/lp/raf?r=f636edd6%2F1930546521", note: "link added" },
-      { name: "mcluck", status: "done", url: "https://mcluck.onelink.me/IsO8", note: "code: 1944571458" },
-      { name: "real prize", status: "done", url: "https://realprize.com/refer/1430325", note: "link added" },
-      { name: "spree", status: "done", url: "https://spree.com/?r=1540676", note: "link added" },
-      { name: "legends", status: "done", url: "https://www.legendz.com/?referred_by_id=464211", note: "link added" },
-      { name: "superslots", status: "done", url: "https://www.superslots.ag?RAF=879FE84D", note: "link added" },
-      { name: "shuffle", status: "done", url: "https://shuffle.us?r=6luSRTfGFM", note: "link added" },
-      { name: "ace", status: "done", url: "https://www.ace.com/?r=4b993878%2F25140294", note: "link added" },
-      { name: "luckyhands", status: "done", url: "https://luckyhands.com/sign-up?code=bc9f512f-392d-45a3-934d-eeee284f1f10", note: "link added" },
-      { name: "taosweeps", status: "done", url: "https://taosweeps.com/register?referral=vjq0k", note: "link added" },
-      { name: "havanafortuna", status: "done", url: "https://havanafortuna.com/en/sign-up?promo=1owetroop", note: "link added" },
-      { name: "crown coins casino", status: "missing" },
-      { name: "roobet", status: "missing" },
-      { name: "rainbet", status: "missing" },
-      { name: "metawin", status: "missing" },
-      { name: "zula", status: "missing" },
-      { name: "sportszino", status: "missing" },
-      { name: "pulsz + pbingo", status: "missing" },
-      { name: "lonestar", status: "missing" },
-      { name: "spinpals", status: "missing" },
-      { name: "modo", status: "missing" },
-      { name: "chumba", status: "missing" },
-      { name: "slotslv", status: "missing" },
-      { name: "bovada", status: "missing" },
-      { name: "ignition", status: "missing" },
-      { name: "wild.io", status: "missing" },
-      { name: "rebet", status: "missing" },
-      { name: "wild casino", status: "missing" },
-      { name: "sidepot", status: "missing" },
-      { name: "luckybird", status: "missing" },
-      { name: "jackpota", status: "missing" },
-      { name: "moozi", status: "missing" },
-      { name: "luckyland casino + luckylandslots", status: "missing" },
-      { name: "my prize us", status: "missing" },
-      { name: "yay!", status: "missing" },
-      { name: "american luck", status: "missing" },
-      { name: "fortunecoins", status: "missing" },
-      { name: "spinquest", status: "missing" },
-      { name: "high5", status: "missing" },
-      { name: "stackr", status: "missing" },
-      { name: "megabonanza", status: "missing" },
-      { name: "rollingriches", status: "missing" },
-      { name: "betr", status: "missing" },
-      { name: "gains", status: "missing" },
-      { name: "clubspoker / clubs casino", status: "missing" },
-      { name: "global poker", status: "missing" },
-      { name: "sweep next", status: "missing" },
-      { name: "chipnwin", status: "missing" },
-      { name: "zoot", status: "missing" },
-      { name: "sixty6", status: "missing" },
-      { name: "smiles", status: "missing" },
-      { name: "dara", status: "missing" },
-      { name: "punt", status: "missing" },
-      { name: "scrooge", status: "missing" }
+      { name: "wowvegas", category: "sweepstakes", status: "done", logoDomain: "wowvegas.com", url: "https://www.wowvegas.com/?raf=9598726", note: "link added" },
+      { name: "luckyrush", category: "sweepstakes", status: "done", logoDomain: "luckyrush.io", url: "https://luckyrush.io/register?referral=4otve", note: "link added" },
+      { name: "stake.com", category: "crypto", status: "missing", logoDomain: "stake.com" },
+      { name: "stake.us", category: "sweepstakes", status: "done", logoDomain: "stake.us", url: "https://luckystake.com/?c=68436_4T8HC6LV", note: "split from old combined Stake entry" },
+      { name: "hello millions", category: "sweepstakes", status: "done", logoDomain: "hellomillions.com", url: "https://www.hellomillions.com/lp/raf?r=3b34d4f6%2F1929775114", note: "link added" },
+      { name: "playfame", category: "sweepstakes", status: "done", logoDomain: "playfame.com", url: "https://www.playfame.com/lp/raf?r=1552d664%2F1949330342", note: "link added" },
+      { name: "spin blitz", category: "sweepstakes", status: "done", logoDomain: "spinblitz.com", url: "https://www.spinblitz.com/lp/raf?r=f636edd6%2F1930546521", note: "link added" },
+      { name: "mcluck", category: "sweepstakes", status: "done", logoDomain: "mcluck.com", url: "https://mcluck.onelink.me/IsO8", note: "code: 1944571458" },
+      { name: "real prize", category: "sweepstakes", status: "done", logoDomain: "realprize.com", url: "https://realprize.com/refer/1430325", note: "link added" },
+      { name: "spree", category: "sweepstakes", status: "done", logoDomain: "spree.com", url: "https://spree.com/?r=1540676", note: "link added" },
+      { name: "legends", category: "sweepstakes", status: "done", logoDomain: "legendz.com", url: "https://www.legendz.com/?referred_by_id=464211", note: "link added" },
+      { name: "superslots", category: "other", status: "done", logoDomain: "superslots.ag", url: "https://www.superslots.ag?RAF=879FE84D", note: "link added" },
+      { name: "shuffle", category: "crypto", status: "done", logoDomain: "shuffle.com", url: "https://shuffle.us?r=6luSRTfGFM", note: "link added" },
+      { name: "ace", category: "other", status: "done", logoDomain: "ace.com", url: "https://www.ace.com/?r=4b993878%2F25140294", note: "link added" },
+      { name: "luckyhands", category: "other", status: "done", logoDomain: "luckyhands.com", url: "https://luckyhands.com/sign-up?code=bc9f512f-392d-45a3-934d-eeee284f1f10", note: "link added" },
+      { name: "taosweeps", category: "sweepstakes", status: "done", logoDomain: "taosweeps.com", url: "https://taosweeps.com/register?referral=vjq0k", note: "link added" },
+      { name: "havanafortuna", category: "sweepstakes", status: "done", logoDomain: "havanafortuna.com", url: "https://havanafortuna.com/en/sign-up?promo=1owetroop", note: "link added" },
+
+      { name: "crown coins casino", category: "sweepstakes", status: "missing", logoDomain: "crowncoinscasino.com" },
+      { name: "roobet", category: "crypto", status: "missing", logoDomain: "roobet.com" },
+      { name: "rainbet", category: "crypto", status: "missing", logoDomain: "rainbet.com" },
+      { name: "metawin", category: "crypto", status: "missing", logoDomain: "metawin.com" },
+      { name: "zula", category: "sweepstakes", status: "missing", logoDomain: "zulacasino.com" },
+      { name: "sportszino", category: "sweepstakes", status: "missing", logoDomain: "sportszino.com" },
+      { name: "pulsz", category: "sweepstakes", status: "missing", logoDomain: "pulsz.com" },
+      { name: "pulsz bingo", category: "sweepstakes", status: "missing", logoDomain: "pulszbingo.com" },
+      { name: "lonestar", category: "sweepstakes", status: "missing", logoDomain: "lonestarcasino.com" },
+      { name: "spinpals", category: "sweepstakes", status: "missing", logoDomain: "spinpals.com" },
+      { name: "modo", category: "sweepstakes", status: "missing", logoDomain: "modo.us" },
+      { name: "chumba", category: "sweepstakes", status: "missing", logoDomain: "chumbacasino.com" },
+      { name: "slotslv", category: "other", status: "missing", logoDomain: "slots.lv" },
+      { name: "bovada", category: "other", status: "missing", logoDomain: "bovada.lv" },
+      { name: "ignition", category: "other", status: "missing", logoDomain: "ignitioncasino.eu" },
+      { name: "wild.io", category: "crypto", status: "missing", logoDomain: "wild.io" },
+      { name: "rebet", category: "crypto", status: "missing", logoDomain: "rebet.io" },
+      { name: "wild casino", category: "other", status: "missing", logoDomain: "wildcasino.ag" },
+      { name: "sidepot", category: "crypto", status: "missing", logoDomain: "sidepot.com" },
+      { name: "luckybird", category: "sweepstakes", status: "missing", logoDomain: "luckybird.io" },
+      { name: "jackpota", category: "sweepstakes", status: "missing", logoDomain: "jackpota.com" },
+      { name: "moozi", category: "sweepstakes", status: "missing", logoDomain: "moozi.com" },
+      { name: "luckyland casino", category: "sweepstakes", status: "missing", logoDomain: "luckylandslots.com" },
+      { name: "luckyland slots", category: "sweepstakes", status: "missing", logoDomain: "luckylandslots.com" },
+      { name: "my prize us", category: "sweepstakes", status: "missing", logoDomain: "myprize.us" },
+      { name: "yay!", category: "sweepstakes", status: "missing", logoDomain: "yaycasino.com" },
+      { name: "american luck", category: "sweepstakes", status: "missing", logoDomain: "americanluck.com" },
+      { name: "fortunecoins", category: "sweepstakes", status: "missing", logoDomain: "fortunecoins.com" },
+      { name: "spinquest", category: "sweepstakes", status: "missing", logoDomain: "spinquest.com" },
+      { name: "high5", category: "sweepstakes", status: "missing", logoDomain: "high5casino.com" },
+      { name: "stackr", category: "sweepstakes", status: "missing", logoDomain: "stackrcasino.com" },
+      { name: "megabonanza", category: "sweepstakes", status: "missing", logoDomain: "megabonanza.com" },
+      { name: "rollingriches", category: "sweepstakes", status: "missing", logoDomain: "rollingriches.com" },
+      { name: "betr", category: "other", status: "missing", logoDomain: "betr.app" },
+      { name: "gains", category: "other", status: "missing", logoDomain: "gains.com" },
+      { name: "sweep next", category: "sweepstakes", status: "missing", logoDomain: "sweepnext.com" },
+      { name: "chipnwin", category: "sweepstakes", status: "missing", logoDomain: "chipnwin.com" },
+      { name: "zoot", category: "sweepstakes", status: "missing", logoDomain: "zoot.us" },
+      { name: "sixty6", category: "sweepstakes", status: "missing", logoDomain: "sixty6.com" },
+      { name: "smiles", category: "sweepstakes", status: "missing", logoDomain: "smilescasino.com" },
+      { name: "dara", category: "sweepstakes", status: "missing", logoDomain: "daracasino.com" },
+      { name: "punt", category: "crypto", status: "missing", logoDomain: "punt.com" },
+      { name: "scrooge", category: "sweepstakes", status: "missing", logoDomain: "scroogecasino.com" }
     ];
+
+    const LEGACY_NAME_MIGRATIONS = {
+      "stake.com + stake.us": "stake.us",
+      "pulsz + pbingo": "pulsz",
+      "luckyland casino + luckylandslots": "luckyland casino"
+    };
 
     const completedGrid = document.getElementById("completedGrid");
     const missingGrid = document.getElementById("missingGrid");
@@ -897,6 +371,7 @@
     const heroDoneCount = document.getElementById("heroDoneCount");
     const completedVisibleCount = document.getElementById("completedVisibleCount");
     const missingVisibleCount = document.getElementById("missingVisibleCount");
+    const activeCategoryCount = document.getElementById("activeCategoryCount");
     const searchInput = document.getElementById("searchInput");
     const filterButtons = document.querySelectorAll(".filter-btn");
     const emptyState = document.getElementById("emptyState");
@@ -910,7 +385,10 @@
     function hydrateCasinos() {
       const saved = loadSavedLinks();
       return baseCasinos.map(item => {
-        const savedItem = saved[item.name];
+        const directSavedItem = saved[item.name];
+        const migratedKey = Object.keys(LEGACY_NAME_MIGRATIONS).find(oldKey => LEGACY_NAME_MIGRATIONS[oldKey] === item.name && saved[oldKey]);
+        const migratedItem = migratedKey ? saved[migratedKey] : null;
+        const savedItem = directSavedItem || migratedItem;
         if (!savedItem) return { ...item };
         return {
           ...item,
@@ -942,6 +420,12 @@
         .join(" ");
     }
 
+    function categoryLabel(category) {
+      if (category === "sweepstakes") return "Sweepstakes";
+      if (category === "crypto") return "Crypto";
+      return "Other";
+    }
+
     function isValidUrl(value) {
       try {
         const parsed = new URL(value.trim());
@@ -951,40 +435,52 @@
       }
     }
 
+    function logoUrl(domain) {
+      return `https://www.google.com/s2/favicons?sz=128&domain=${encodeURIComponent(domain || "rroll.my")}`;
+    }
+
     function makeCard(item) {
       const card = document.createElement("article");
       card.className = "card";
       card.dataset.status = item.status;
       card.dataset.name = item.name.toLowerCase();
+      card.dataset.category = item.category;
 
       const isEditing = editingName === item.name;
       const badgeClass = item.status === "done" ? "badge done" : isEditing ? "badge editing" : "badge missing";
       const badgeText = item.status === "done" ? "Completed" : isEditing ? "Editing" : "Missing";
-      const subText = item.status === "done" ? (item.note || "referral link saved") : isEditing ? "paste the referral link below, then save it" : "tap add link to paste your referral URL";
+      const subText = item.status === "done"
+        ? (item.note || "referral link saved")
+        : isEditing
+          ? "paste the referral link below, then save it"
+          : "tap add link to paste your referral URL";
 
+      const existingUrl = item.url || "";
       let actionHtml = "";
 
-      if (item.status === "done") {
+      if (isEditing) {
+        actionHtml = `
+          <div class="link-input-wrap">
+            <input class="link-input" type="url" data-link-input="${item.name}" value="${existingUrl.replace(/"/g, "&quot;")}" placeholder="Paste referral link here..." />
+            <div class="editor-actions">
+              <button class="editor-btn primary ${isValidUrl(existingUrl) ? "" : "disabled"}" type="button" data-save-link="${item.name}">${isValidUrl(existingUrl) ? "Save Link" : "Paste Link"}</button>
+              <button class="cancel-btn" type="button" data-cancel-link="${item.name}">Cancel</button>
+            </div>
+          </div>
+        `;
+      } else if (item.status === "done") {
         actionHtml = `
           <div class="actions">
             <a class="visit-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">Open Link</a>
+            <button class="editor-btn secondary" type="button" data-open-editor="${item.name}">Edit Link</button>
             <button class="copy-btn" type="button" data-copy="${item.url.replace(/"/g, "&quot;")}">Copy</button>
-          </div>
-        `;
-      } else if (isEditing) {
-        actionHtml = `
-          <div class="link-input-wrap">
-            <input class="link-input" type="url" data-link-input="${item.name}" placeholder="Paste referral link here..." />
-            <div class="editor-actions">
-              <button class="editor-btn primary" type="button" data-save-link="${item.name}">Save</button>
-              <button class="cancel-btn" type="button" data-cancel-link="${item.name}">Cancel</button>
-            </div>
           </div>
         `;
       } else {
         actionHtml = `
           <div class="actions">
             <button class="editor-btn secondary" type="button" data-open-editor="${item.name}">Add Link</button>
+            <div class="placeholder-btn">No Link Yet</div>
             <button class="copy-btn" type="button" data-copy="${item.name.replace(/"/g, "&quot;")}">Copy Name</button>
           </div>
         `;
@@ -993,8 +489,17 @@
       card.innerHTML = `
         <div class="card-top">
           <div class="left-meta">
-            <h3 class="casino-name">${formatName(item.name)}</h3>
-            <div class="casino-sub">${subText}</div>
+            <div class="casino-row">
+              <img class="casino-logo" src="${logoUrl(item.logoDomain)}" alt="${formatName(item.name)} logo" loading="lazy" referrerpolicy="no-referrer" />
+              <div>
+                <h3 class="casino-name">${formatName(item.name)}</h3>
+                <div class="casino-sub">${subText}</div>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="mini-tag">${categoryLabel(item.category)}</span>
+              ${item.logoDomain ? `<span class="mini-tag">${item.logoDomain.replace(/^www\./, "")}</span>` : ""}
+            </div>
           </div>
           <div class="${badgeClass}">${badgeText}</div>
         </div>
@@ -1007,9 +512,27 @@
     function getFilteredData() {
       return casinos.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
-        const matchesFilter = activeFilter === "all" ? true : item.status === activeFilter;
+        const matchesFilter =
+          activeFilter === "all" ? true :
+          activeFilter === "done" || activeFilter === "missing" ? item.status === activeFilter :
+          item.category === activeFilter;
         return matchesSearch && matchesFilter;
       });
+    }
+
+    function sortCasinos(items) {
+      return [...items].sort((a, b) => {
+        if (a.category !== b.category) return a.category.localeCompare(b.category);
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function updateSaveButtonState(input) {
+      const saveButton = document.querySelector(`[data-save-link="${CSS.escape(input.dataset.linkInput)}"]`);
+      if (!saveButton) return;
+      const valid = isValidUrl(input.value);
+      saveButton.textContent = valid ? "Save Link" : "Paste Link";
+      saveButton.classList.toggle("disabled", !valid);
     }
 
     function bindCardActions() {
@@ -1023,7 +546,11 @@
           render();
           requestAnimationFrame(() => {
             const input = document.querySelector(`[data-link-input="${CSS.escape(editingName)}"]`);
-            if (input) input.focus();
+            if (input) {
+              input.focus();
+              input.setSelectionRange(input.value.length, input.value.length);
+              updateSaveButtonState(input);
+            }
           });
         };
       });
@@ -1037,13 +564,13 @@
 
       document.querySelectorAll("[data-save-link]").forEach(button => {
         button.onclick = () => {
+          if (button.classList.contains("disabled")) return;
           const name = button.dataset.saveLink;
           const input = document.querySelector(`[data-link-input="${CSS.escape(name)}"]`);
           if (!input) return;
           const value = input.value.trim();
           if (!isValidUrl(value)) {
-            input.value = "";
-            input.placeholder = "Paste a real https:// link...";
+            updateSaveButtonState(input);
             input.focus();
             return;
           }
@@ -1055,6 +582,7 @@
       });
 
       document.querySelectorAll(".link-input").forEach(input => {
+        input.addEventListener("input", () => updateSaveButtonState(input));
         input.addEventListener("keydown", event => {
           if (event.key === "Enter") {
             const name = input.dataset.linkInput;
@@ -1070,8 +598,8 @@
       missingGrid.innerHTML = "";
 
       const filtered = getFilteredData();
-      const completed = filtered.filter(item => item.status === "done");
-      const missing = filtered.filter(item => item.status === "missing");
+      const completed = sortCasinos(filtered.filter(item => item.status === "done"));
+      const missing = sortCasinos(filtered.filter(item => item.status === "missing"));
 
       completed.forEach(item => completedGrid.appendChild(makeCard(item)));
       missing.forEach(item => missingGrid.appendChild(makeCard(item)));
@@ -1084,6 +612,8 @@
       doneCount.textContent = done;
       missingCount.textContent = missingTotal;
       heroDoneCount.textContent = done;
+      activeCategoryCount.textContent = activeFilter === "all" ? "All" : (activeFilter === "done" || activeFilter === "missing" ? formatName(activeFilter) : categoryLabel(activeFilter));
+
       completedVisibleCount.textContent = `${completed.length} visible`;
       missingVisibleCount.textContent = `${missing.length} visible`;
 
