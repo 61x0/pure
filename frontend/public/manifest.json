@@ -1,0 +1,15 @@
+{
+  "short_name": "RROLL",
+  "name": "RROLL Referral Hub",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23050505'/><text x='50' y='65' font-size='60' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='900'>R</text></svg>",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#050505",
+  "background_color": "#050505"
+}
