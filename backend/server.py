@@ -124,6 +124,12 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 def generate_referral_code(user_id: str) -> str:
     return f"RROLL-{user_id[:8].upper()}"
 
+def serialize_doc(doc: dict) -> dict:
+    """Remove MongoDB _id and convert to JSON-safe format"""
+    if doc and '_id' in doc:
+        doc.pop('_id')
+    return doc
+
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
     try:
